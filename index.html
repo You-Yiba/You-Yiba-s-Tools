@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游一八工具箱</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23eff6ff'/%3E%3Cstop offset='100%25' style='stop-color:%23e0e7ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' fill='url(%23bg)'/%3E%3Ctext x='16' y='22' font-family='Inter, system-ui, sans-serif' font-size='14' font-weight='bold' text-anchor='middle' fill='%233b82f6'%3E游一八%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        accent: '#f43f5e',
+                        neutral: '#f1f5f9',
+                        'neutral-dark': '#334155'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/common.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 顶部信息区 -->
+        <header class="mb-12 text-center">
+            <h1 class="text-5xl font-bold text-primary mb-4 fade-in">游一八工具箱</h1>
+            <p class="text-xl text-secondary max-w-2xl mx-auto fade-in">
+                遇到问题不要慌，打开一八工具箱
+            </p>
+        </header>
+
+        <!-- 工具展示区域 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <!-- 工具卡片 1 -->
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="window.location.href='tools/Task!/Task!.html'">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <img src="tools/Task!/favicon.ico" alt="Task!" class="w-10 h-10">
+                    </div>
+                    <h2 class="text-2xl font-bold text-neutral-dark mb-2">Task!</h2>
+                    <p class="text-secondary mb-4">任务管理工具，帮助你追踪和完成各项任务</p>
+                    <div class="mt-auto w-full">
+                        <button class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            <i class="fa fa-arrow-right mr-2"></i> 打开工具
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工具卡片 2 (占位，用于后续添加工具) -->
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" style="opacity: 0.7;">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-plus text-3xl text-gray-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-neutral-dark mb-2">工具名称</h2>
+                    <p class="text-secondary mb-4">工具描述，介绍工具的功能和用途</p>
+                    <div class="mt-auto w-full">
+                        <button class="w-full bg-gray-400 cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-lock mr-2"></i> 即将上线
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工具卡片 3 (占位，用于后续添加工具) -->
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" style="opacity: 0.7;">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-plus text-3xl text-gray-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-neutral-dark mb-2">工具名称</h2>
+                    <p class="text-secondary mb-4">工具描述，介绍工具的功能和用途</p>
+                    <div class="mt-auto w-full">
+                        <button class="w-full bg-gray-400 cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-lock mr-2"></i> 即将上线
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部信息区 -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>游一八工具箱 作者:游一八 power by Trae</p>
+        </footer>
+    </div>
+
+    <script src="assets/js/common.js"></script>
+</body>
+</html>
