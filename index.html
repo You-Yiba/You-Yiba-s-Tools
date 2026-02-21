@@ -94,6 +94,13 @@
             </div>
         </div>
 
+        <!-- 功能按钮区域 -->
+        <div class="text-center mb-8 flex justify-center space-x-4">
+            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-code mr-2"></i> 开发者选项
+            </button>
+        </div>
+
         <!-- 底部信息区 -->
         <footer class="text-center text-gray-500 text-sm">
             <p>游一八工具箱 作者:游一八 power by Trae</p>
@@ -101,5 +108,84 @@
     </div>
 
     <script src="assets/js/common.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化开发者工具弹窗
+            initModal('dev-tools-modal', 'dev-tools-btn', 'dev-tools-close', 'dev-tools-overlay');
+            
+            // 为开发者工具按钮添加点击事件，显示浏览器信息
+            const devToolsBtn = document.getElementById('dev-tools-btn');
+            if (devToolsBtn) {
+                devToolsBtn.addEventListener('click', function() {
+                    displayBrowserInfo();
+                });
+            }
+
+            // 初始化应用
+            initCommon();
+        });
+    </script>
+
+    <!-- 开发者工具弹窗 -->
+    <div id="dev-tools-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="dev-tools-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-code mr-2 text-gray-700"></i> 开发者工具
+                </h2>
+                <button id="dev-tools-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 开发者工具内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <h3 class="text-lg font-semibold mb-4">浏览器信息</h3>
+                
+                <!-- 浏览器版本信息 -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                            <span class="text-secondary">浏览器名称</span>
+                            <span id="browser-name" class="font-medium">-</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                            <span class="text-secondary">浏览器版本</span>
+                            <span id="browser-version" class="font-medium">-</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                            <span class="text-secondary">用户代理</span>
+                            <span id="user-agent" class="font-medium break-all">-</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+                            <span class="text-secondary">操作系统</span>
+                            <span id="operating-system" class="font-medium">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 其他信息 -->
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-medium mb-2">应用信息</h4>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <div class="space-y-2">
+                                <p><span class="text-secondary">应用名称:</span> 游一八工具箱</p>
+                                <p><span class="text-secondary">版本:</span> 1.0.0</p>
+                                <p><span class="text-secondary">作者:</span> 游一八</p>
+                                <p><span class="text-secondary">技术栈:</span> HTML, CSS, JavaScript, Tailwind CSS</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
