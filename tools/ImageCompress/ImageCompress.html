@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片压缩</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23eff6ff'/%3E%3Cstop offset='100%25' style='stop-color:%23e0e7ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' fill='url(%23bg)'/%3E%3Ctext x='16' y='22' font-family='Inter, system-ui, sans-serif' font-size='14' font-weight='bold' text-anchor='middle' fill='%233b82f6'%3E图片压缩%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Compressor.js -->
+    <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
+    <!-- JSZip for ZIP download -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        accent: '#f43f5e',
+                        neutral: '#f1f5f9',
+                        'neutral-dark': '#334155'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 顶部信息区 -->
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-primary mb-2 fade-in">图片压缩</h1>
+            <p class="text-xl text-secondary max-w-2xl mx-auto fade-in">
+                简单高效的图片压缩工具，支持批量处理和多种压缩选项
+            </p>
+        </header>
+
+        <!-- 功能按钮区域 -->
+        <div class="text-center mb-8 flex justify-center space-x-4">
+            <button id="theme-toggle" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-moon-o mr-2"></i> 切换主题
+            </button>
+            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-history mr-2"></i> 历史记录
+            </button>
+            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-code mr-2"></i> 开发者选项
+            </button>
+        </div>
+
+        <!-- 主要内容区 -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-12">
+            <!-- 上传区域 -->
+            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-4">图片上传</h2>
+                <div id="drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors">
+                    <i class="fa fa-cloud-upload text-5xl text-gray-400 mb-4"></i>
+                    <p class="text-secondary mb-4">点击或拖拽图片到此处上传</p>
+                    <p class="text-sm text-gray-500 mb-4">支持 JPG/PNG/WebP 格式，单张≤10MB，批量最多20张（总≤50MB）</p>
+                    <p class="text-sm text-gray-500 mb-4">上传后请不要刷新页面，否则上传的图片将被清空</p>
+                    <input type="file" id="file-input" class="hidden" accept="image/jpeg,image/png,image/webp" multiple>
+                    <button id="browse-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                        <i class="fa fa-folder-open mr-2"></i> 选择文件
+                    </button>
+                </div>
+                
+                <!-- 上传进度条区域 -->
+                <div id="upload-progress-container" class="mt-6 space-y-4 hidden">
+                    <h3 class="text-lg font-semibold text-neutral-dark">上传进度</h3>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="upload-progress-bar" class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>正在处理文件...</span>
+                        <span id="upload-progress-percent">0%</span>
+                    </div>
+                </div>
+                
+                <div id="uploaded-files" class="mt-6 space-y-4 hidden">
+                    <h3 class="text-lg font-semibold text-neutral-dark">已上传文件</h3>
+                    <div id="file-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- 文件列表将通过JS动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 压缩设置区域 -->
+            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-6">压缩设置</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 质量调节 -->
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-2">质量调节</label>
+                        <div class="flex items-center space-x-4">
+                            <input type="range" id="quality-slider" min="0" max="100" value="80" class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span id="quality-value" class="text-sm font-medium w-12 text-center">80%</span>
+                        </div>
+                    </div>
+
+                    <!-- 目标大小 -->
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-2">目标大小</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="number" id="target-size" min="1" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="输入目标大小">
+                            <select id="size-unit" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                <option value="KB">KB</option>
+                                <option value="MB">MB</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 尺寸调整 -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-secondary mb-3">尺寸调整</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- 比例缩放 -->
+                            <div>
+                                <label class="block text-xs font-medium text-secondary mb-2">比例缩放</label>
+                                <div class="flex space-x-2">
+                                    <button class="scale-btn flex-1 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition-colors" data-scale="0.5">50%</button>
+                                    <button class="scale-btn flex-1 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition-colors" data-scale="0.75">75%</button>
+                                    <button class="scale-btn flex-1 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition-colors" data-scale="1">100%</button>
+                                </div>
+                            </div>
+
+                            <!-- 自定义宽高 -->
+                            <div>
+                                <label class="block text-xs font-medium text-secondary mb-2">自定义宽高</label>
+                                <div class="space-y-2">
+                                    <div class="flex space-x-2">
+                                        <input type="number" id="custom-width" class="flex-1 px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="宽">
+                                        <input type="number" id="custom-height" class="flex-1 px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="高">
+                                        <button id="lock-ratio" class="p-1 border border-gray-300 rounded-lg hover:bg-primary hover:text-white transition-colors">
+                                            <i class="fa fa-link"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 预设尺寸 -->
+                            <div>
+                                <label class="block text-xs font-medium text-secondary mb-2">预设尺寸</label>
+                                <select id="preset-size" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                    <option value="">选择预设</option>
+                                    <option value="1920x1080">1920×1080</option>
+                                    <option value="1280x720">1280×720</option>
+                                    <option value="800x600">800×600</option>
+                                    <option value="480x320">480×320</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button id="compress-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors inline-flex items-center justify-center">
+                        <i class="fa fa-compress mr-2"></i> 开始压缩
+                    </button>
+                </div>
+            </div>
+
+            <!-- 预览与对比区域 -->
+            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-4">预览与对比</h2>
+                <div id="preview-container" class="hidden">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-neutral-dark mb-2">原图信息</h3>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <span class="text-secondary text-sm">文件名:</span>
+                                    <p id="original-filename" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <span class="text-secondary text-sm">尺寸:</span>
+                                    <p id="original-size" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <span class="text-secondary text-sm">文件大小:</span>
+                                    <p id="original-file-size" class="font-medium"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-container relative mb-6">
+                        <div class="comparison-wrapper overflow-hidden rounded-lg">
+                            <img id="original-image" class="absolute top-0 left-0 w-full h-full object-contain" alt="原图">
+                            <img id="compressed-image" class="w-full h-full object-contain" alt="压缩后">
+                            <div class="slider-handle absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize" style="left: 50%"></div>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">原图</div>
+                        <div class="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">压缩后</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold text-neutral-dark mb-2">压缩结果</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <span class="text-secondary text-sm">压缩后大小:</span>
+                                <p id="compressed-file-size" class="font-medium"></p>
+                            </div>
+                            <div>
+                                <span class="text-secondary text-sm">压缩率:</span>
+                                <p id="compression-ratio" class="font-medium"></p>
+                            </div>
+                            <div>
+                                <span class="text-secondary text-sm">节省空间:</span>
+                                <p id="space-saved" class="font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <button id="download-single" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                            <i class="fa fa-download mr-2"></i> 下载当前图片
+                        </button>
+                        <button id="download-all" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                            <i class="fa fa-file-archive-o mr-2"></i> 批量打包下载
+                        </button>
+                    </div>
+                </div>
+                <div id="no-preview" class="text-center py-12">
+                    <i class="fa fa-eye-slash text-5xl text-gray-400 mb-4"></i>
+                    <p class="text-secondary">上传图片并压缩后查看预览</p>
+                </div>
+            </div>
+
+            <!-- 批量压缩进度 -->
+            <div id="progress-container" class="glass-effect rounded-xl shadow-card p-6 fade-in hidden">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-4">压缩进度</h2>
+                <div class="mb-4">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-secondary">压缩中...</span>
+                        <span id="progress-percent" class="text-sm font-medium text-primary">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div id="progress-list" class="space-y-2">
+                    <!-- 进度列表将通过JS动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- 历史记录弹窗 -->
+    <div id="history-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="history-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="history-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-history mr-2 text-secondary"></i> 历史记录
+                </h2>
+                <button id="history-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 历史记录列表 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="history-list" class="space-y-4">
+                    <!-- 历史记录将通过JavaScript动态生成 -->
+                    <div class="text-center text-secondary py-8" id="empty-history">
+                        <i class="fa fa-clock-o text-4xl mb-3 opacity-50"></i>
+                        <p>暂无历史记录</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 错误提示弹窗 -->
+    <div id="error-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <!-- 遮罩层 -->
+        <div id="error-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="error-container" class="relative glass-effect rounded-xl shadow-lg p-6 max-w-md mx-4">
+            <!-- 弹窗头部 -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-exclamation-circle mr-2 text-accent"></i> 错误提示
+                </h3>
+                <button id="error-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 错误信息 -->
+            <div class="mb-6">
+                <p id="error-message" class="text-secondary"></p>
+            </div>
+            
+            <!-- 确认按钮 -->
+            <div class="text-right">
+                <button id="error-confirm" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                    <i class="fa fa-check mr-2"></i> 确认
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 开发者工具弹窗 -->
+    <div id="dev-tools-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="dev-tools-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-code mr-2 text-gray-700"></i> 开发者选项
+                </h2>
+                <button id="dev-tools-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 开发者工具内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <h3 class="text-lg font-semibold mb-4">调试功能</h3>
+                
+                <!-- 其他调试功能 -->
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-medium mb-2">数据管理</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="clear-all" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
+                                <i class="fa fa-trash mr-2"></i> 清空所有
+                            </button>
+                            <button id="clear-history" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
+                                <i class="fa fa-history mr-2"></i> 清空历史记录
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-2">系统信息</h4>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <p class="text-sm text-secondary">图片压缩工具 v1.0.0</p>
+                            <p class="text-sm text-secondary">基于 Compressor.js 和 JSZip</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 更新日志弹窗 -->
+    <div id="changelog-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-list-alt mr-2 text-secondary"></i> 更新日志
+                </h2>
+                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 更新日志内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="changelog-content" class="space-y-6">
+                    <!-- 更新日志内容 -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold mb-2">v1.0.0 (2026-02-21)</h3>
+                        <ul class="list-disc list-inside space-y-2 text-secondary">
+                            <li>初始版本发布</li>
+                            <li>支持图片上传（拖拽、点击选择）</li>
+                            <li>支持图片压缩（质量调节、尺寸调整）</li>
+                            <li>支持预览对比功能</li>
+                            <li>支持单张和批量下载</li>
+                            <li>支持历史记录功能</li>
+                            <li>支持主题切换功能</li>
+                            <li>添加开发者选项</li>
+                            <li>添加更新日志功能</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-2 max-w-6xl">
+        <div class="text-center text-gray-500 text-sm">图片压缩工具 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
