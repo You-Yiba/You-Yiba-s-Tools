@@ -1,0 +1,54 @@
+/* Task! 自定义样式 */
+
+/* 日历样式 - Task! 特有 */
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.calendar-day.today {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 500;
+}
+
+.calendar-day.has-task {
+    position: relative;
+}
+
+.calendar-day.has-task::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background-color: #3b82f6;
+    border-radius: 50%;
+}
+
+/* 待办事项列表滚动条样式 - Task! 特有 */
+#todo-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#todo-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+#todo-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+#todo-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

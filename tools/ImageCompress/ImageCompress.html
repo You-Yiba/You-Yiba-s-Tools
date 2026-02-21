@@ -50,9 +50,7 @@
 
         <!-- 功能按钮区域 -->
         <div class="text-center mb-8 flex justify-center space-x-4">
-            <button id="theme-toggle" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-moon-o mr-2"></i> 切换主题
-            </button>
+
             <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-history mr-2"></i> 历史记录
             </button>
@@ -125,9 +123,9 @@
                     <!-- 尺寸调整 -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-secondary mb-3">尺寸调整</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="flex flex-col md:flex-row gap-6">
                             <!-- 比例缩放 -->
-                            <div>
+                            <div class="flex-1">
                                 <label class="block text-xs font-medium text-secondary mb-2">比例缩放</label>
                                 <div class="flex space-x-2">
                                     <button class="scale-btn flex-1 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition-colors" data-scale="0.5">50%</button>
@@ -137,13 +135,13 @@
                             </div>
 
                             <!-- 自定义宽高 -->
-                            <div>
+                            <div class="flex-1">
                                 <label class="block text-xs font-medium text-secondary mb-2">自定义宽高</label>
                                 <div class="space-y-2">
                                     <div class="flex space-x-2">
-                                        <input type="number" id="custom-width" class="flex-1 px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="宽">
-                                        <input type="number" id="custom-height" class="flex-1 px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="高">
-                                        <button id="lock-ratio" class="p-1 border border-gray-300 rounded-lg hover:bg-primary hover:text-white transition-colors">
+                                        <input type="number" id="custom-width" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="宽">
+                                        <input type="number" id="custom-height" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="高">
+                                        <button id="lock-ratio" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-primary hover:text-white transition-colors flex items-center justify-center">
                                             <i class="fa fa-link"></i>
                                         </button>
                                     </div>
@@ -151,7 +149,7 @@
                             </div>
 
                             <!-- 预设尺寸 -->
-                            <div>
+                            <div class="flex-1">
                                 <label class="block text-xs font-medium text-secondary mb-2">预设尺寸</label>
                                 <select id="preset-size" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
                                     <option value="">选择预设</option>
@@ -394,7 +392,6 @@
                             <li>支持预览对比功能</li>
                             <li>支持单张和批量下载</li>
                             <li>支持历史记录功能</li>
-                            <li>支持主题切换功能</li>
                             <li>添加开发者选项</li>
                             <li>添加更新日志功能</li>
                         </ul>

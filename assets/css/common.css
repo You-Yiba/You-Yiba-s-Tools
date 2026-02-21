@@ -1,15 +1,20 @@
 /* 可复用样式 */
 @layer utilities {
+    /* 玻璃效果 */
     .glass-effect {
         background-color: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(12px);
     }
+    
+    /* 工具卡片 */
     .tool-card {
         transition: all 0.3s ease;
     }
     .tool-card:hover {
         transform: translateY(-5px);
     }
+    
+    /* 动画效果 */
     .fade-in {
         animation: fadeIn 0.5s ease-in-out;
     }
@@ -17,6 +22,24 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
+    
+    .slide-out {
+        animation: slideOut 0.3s ease-in-out forwards;
+    }
+    @keyframes slideOut {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-100%); }
+    }
+    
+    .modal-slide-out {
+        animation: modalSlideOut 0.3s ease-in-out forwards;
+    }
+    @keyframes modalSlideOut {
+        from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    }
+    
+    /* 日历样式 */
     .calendar-day {
         width: 48px;
         height: 48px;
@@ -51,6 +74,8 @@
     .calendar-day.has-task.today::after {
         background-color: white;
     }
+    
+    /* 待办事项 */
     .todo-item {
         transition: all 0.3s;
         transform: translateX(0);
@@ -58,18 +83,221 @@
     .todo-item:hover {
         transform: translateX(-4px);
     }
-    .slide-out {
-        animation: slideOut 0.3s ease-in-out forwards;
+    
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+        width: 6px;
     }
-    @keyframes slideOut {
-        from { opacity: 1; transform: translateX(0); }
-        to { opacity: 0; transform: translateX(-100%); }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
     }
-    .modal-slide-out {
-        animation: modalSlideOut 0.3s ease-in-out forwards;
+    
+    ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
     }
-    @keyframes modalSlideOut {
-        from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+    
+    /* 按钮状态 */
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    /* 工具提示 */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 12px;
+    }
+    
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+    
+    /* 主题切换 */
+    body.dark-theme {
+        background: #1e293b;
+        color: #f8fafc;
+    }
+    
+    body.dark-theme .glass-effect {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    body.dark-theme .bg-white {
+        background: #334155;
+        color: #f8fafc;
+    }
+    
+    body.dark-theme .text-neutral-dark {
+        color: #f8fafc;
+    }
+    
+    body.dark-theme .text-secondary {
+        color: #94a3b8;
+    }
+    
+    body.dark-theme .border-gray-300 {
+        border-color: #475569;
+    }
+    
+    body.dark-theme .bg-gray-200 {
+        background: #475569;
+    }
+    
+    /* 模态框通用样式 */
+    .modal {
+        transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        transition: opacity 0.3s ease;
+    }
+    
+    .modal-content {
+        transition: transform 0.3s ease;
+    }
+    
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 1rem;
+        }
+    }
+    
+    /* 加载动画 */
+    .loading {
+        display: inline-block;
+        position: relative;
+        width: 20px;
+        height: 20px;
+    }
+    
+    .loading::after {
+        content: '';
+        display: block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: loading 1.2s linear infinite;
+    }
+    
+    @keyframes loading {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    
+    /* 滑块样式 */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* 预设尺寸和比例按钮选中状态 */
+    .scale-btn.active,
+    #preset-size option:checked {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+    
+    /* 锁定比例按钮状态 */
+    #lock-ratio.locked {
+        background: #3b82f6;
+        color: white;
+    }
+    
+    /* 进度条 */
+    #progress-bar {
+        transition: width 0.3s ease;
+    }
+    
+    /* 文件列表项 */
+    .file-item {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .file-item:hover {
+        transform: translateY(-2px);
+    }
+    
+    .file-item:hover .file-remove {
+        opacity: 1;
+    }
+    
+    .file-remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(244, 63, 94, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+    }
+    
+    .file-remove:hover {
+        background: rgba(244, 63, 94, 1);
     }
 }

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天选之子</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23eff6ff'/%3E%3Cstop offset='100%25' style='stop-color:%23e0e7ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' fill='url(%23bg)'/%3E%3Ctext x='16' y='22' font-family='Inter, system-ui, sans-serif' font-size='14' font-weight='bold' text-anchor='middle' fill='%233b82f6'%3E天选之子%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        accent: '#f43f5e',
+                        neutral: '#f1f5f9',
+                        'neutral-dark': '#334155'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- 通用样式（必须） -->
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <!-- 工具特定样式（可选） -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 顶部信息区 -->
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-primary mb-2 fade-in">天选之子</h1>
+            <p class="text-xl text-secondary max-w-2xl mx-auto fade-in">
+                随机抽取人员工具，适用于课堂点名、活动抽奖等场景
+            </p>
+        </header>
+
+        <!-- 功能按钮区域 -->
+        <div class="text-center mb-8 flex justify-center space-x-4">
+            <!-- 历史记录按钮（可选） -->
+            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-history mr-2"></i> 历史记录
+            </button>
+            <!-- 开发者选项按钮（推荐） -->
+            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-code mr-2"></i> 开发者选项
+            </button>
+        </div>
+
+        <!-- 主要内容区 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- 左侧：名单管理 -->
+            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-4">名单管理</h2>
+                
+                <!-- 名单导入 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">名单导入 测试中，可能出现bug</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-secondary mb-1">TXT文件导入</label>
+                            <input type="file" id="txt-upload" accept=".txt" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-secondary mb-1">Excel文件导入</label>
+                            <input type="file" id="excel-upload" accept=".xls,.xlsx" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <div class="mt-2 flex items-center">
+                                <input type="checkbox" id="skip-header" class="mr-2">
+                                <label for="skip-header" class="text-sm text-secondary">跳过第一行表头</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 学号范围输入 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">学号范围输入</h3>
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="start-id" class="block text-sm font-medium text-secondary mb-1">开始学号</label>
+                                <input type="number" id="start-id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label for="end-id" class="block text-sm font-medium text-secondary mb-1">结束学号</label>
+                                <input type="number" id="end-id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                        </div>
+                        <button id="generate-ids" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            生成学号列表
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 名单操作 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">名单操作</h3>
+                    <div class="space-y-3">
+                        <button id="remove-duplicates" class="w-full bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            <i class="fa fa-refresh mr-2"></i> 去重
+                        </button>
+                        <button id="reset-pool" class="w-full bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            <i class="fa fa-recycle mr-2"></i> 重置抽取池
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 多名单管理 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">多名单管理</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label for="list-name" class="block text-sm font-medium text-secondary mb-1">名单名称</label>
+                            <input type="text" id="list-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="输入名单名称">
+                        </div>
+                        <button id="save-list" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            <i class="fa fa-save mr-2"></i> 保存当前名单
+                        </button>
+                        <div>
+                            <label for="saved-lists" class="block text-sm font-medium text-secondary mb-1">已保存名单</label>
+                            <select id="saved-lists" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option value="">选择名单</option>
+                            </select>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="load-list" class="flex-1 bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                <i class="fa fa-folder-open mr-1"></i> 加载
+                            </button>
+                            <button id="edit-list" class="flex-1 bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                <i class="fa fa-edit mr-1"></i> 编辑
+                            </button>
+                            <button id="delete-list" class="flex-1 bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                <i class="fa fa-trash mr-1"></i> 删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中间：抽取设置 -->
+            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-4">抽取设置</h2>
+                
+                <!-- 抽取类型 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">抽取类型</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <input type="radio" id="extract-id" name="extract-type" value="id" checked class="mr-2">
+                            <label for="extract-id" class="text-secondary">仅抽取学号</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="extract-name" name="extract-type" value="name" class="mr-2">
+                            <label for="extract-name" class="text-secondary">仅抽取人名</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="extract-both" name="extract-type" value="both" class="mr-2">
+                            <label for="extract-both" class="text-secondary">学号+人名</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 抽取人数 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">抽取人数</h3>
+                    <div class="flex items-center">
+                        <input type="number" id="extract-count" min="1" value="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                
+                <!-- 不重复抽取 -->
+                <div class="mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="no-repeat" checked class="mr-2">
+                        <label for="no-repeat" class="text-secondary">不重复抽取</label>
+                    </div>
+                </div>
+                
+                <!-- 滚动动画设置 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">滚动动画设置</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="scroll-speed" class="block text-sm font-medium text-secondary mb-1">滚动速度: <span id="speed-value">100</span>ms</label>
+                            <input type="range" id="scroll-speed" min="10" max="500" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        <div>
+                            <label for="scroll-duration" class="block text-sm font-medium text-secondary mb-1">滚动持续时间: <span id="duration-value">3</span>秒</label>
+                            <input type="range" id="scroll-duration" min="1" max="10" value="3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 开始抽取按钮 -->
+                <div class="pt-4">
+                    <button id="start-extraction" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors text-lg">
+                        <i class="fa fa-random mr-2"></i> 开始抽取
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 右侧：结果展示 -->
+            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+                <h2 class="text-2xl font-bold text-neutral-dark mb-4">结果展示</h2>
+                
+                <!-- 滚动区域 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-3">滚动展示</h3>
+                    <div id="rolling-area" class="h-32 bg-white rounded-lg flex items-center justify-center overflow-hidden shadow-inner">
+                        <div id="rolling-content" class="text-3xl font-bold text-primary">点击开始抽取</div>
+                    </div>
+                </div>
+                
+                <!-- 已抽取列表 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">已抽取人员</h3>
+                    <div id="extracted-list" class="max-h-60 overflow-y-auto space-y-2">
+                        <div class="text-center text-secondary py-8" id="empty-extracted">
+                            <i class="fa fa-user-o text-4xl mb-3 opacity-50"></i>
+                            <p>暂无抽取记录</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 历史记录弹窗（可选） -->
+    <div id="history-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="history-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="history-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-history mr-2 text-secondary"></i> 历史记录
+                </h2>
+                <div class="flex space-x-2">
+                    <button id="clear-history" class="bg-accent hover:bg-accent/90 text-white font-medium py-1 px-4 rounded-lg transition-colors flex items-center text-sm">
+                        <i class="fa fa-trash mr-1"></i> 清空
+                    </button>
+                    <button id="history-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i class="fa fa-times text-secondary"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 筛选控件 -->
+            <div class="p-4 border-b border-gray-200 bg-gray-50">
+                <div class="flex flex-wrap gap-4 items-center">
+                    <div>
+                        <label for="history-filter-time" class="block text-sm font-medium text-secondary mb-1">时间筛选</label>
+                        <select id="history-filter-time" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">全部时间</option>
+                            <option value="today">今天</option>
+                            <option value="week">本周</option>
+                            <option value="month">本月</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="history-filter-operation" class="block text-sm font-medium text-secondary mb-1">操作类型</label>
+                        <select id="history-filter-operation" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">全部操作</option>
+                            <option value="extract">抽取</option>
+                            <option value="import">导入</option>
+                            <option value="generate_ids">生成学号</option>
+                            <option value="remove_duplicates">去重</option>
+                            <option value="reset_pool">重置抽取池</option>
+                            <option value="save_list">保存名单</option>
+                            <option value="load_list">加载名单</option>
+                            <option value="edit_list">编辑名单</option>
+                            <option value="delete_list">删除名单</option>
+                            <option value="add_test_data">添加测试数据</option>
+                            <option value="clear_all">清空所有</option>
+                        </select>
+                    </div>
+                    <div class="flex space-x-2 self-end">
+                        <button id="delete-filtered-history" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center text-sm">
+                            <i class="fa fa-trash mr-1"></i> 删除筛选结果
+                        </button>
+                        <button id="apply-filters" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
+                            <i class="fa fa-filter mr-1"></i> 应用筛选
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 历史记录列表 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="history-list" class="space-y-4">
+                    <!-- 历史记录将通过JavaScript动态生成 -->
+                    <div class="text-center text-secondary py-8" id="empty-history">
+                        <i class="fa fa-clock-o text-4xl mb-3 opacity-50"></i>
+                        <p>暂无历史记录</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 开发者工具弹窗（推荐） -->
+    <div id="dev-tools-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="dev-tools-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-code mr-2 text-gray-700"></i> 开发者选项
+                </h2>
+                <button id="dev-tools-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 开发者工具内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <h3 class="text-lg font-semibold mb-4">调试功能</h3>
+                
+                <!-- 其他调试功能 -->
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-medium mb-2">数据管理</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="clear-all" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
+                                <i class="fa fa-trash mr-2"></i> 清空所有
+                            </button>
+                            <button id="add-test-data" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
+                                <i class="fa fa-database mr-2"></i> 添加测试数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 更新日志弹窗（必须） -->
+    <div id="changelog-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-list-alt mr-2 text-secondary"></i> 更新日志
+                </h2>
+                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 更新日志内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="changelog-content" class="space-y-6">
+                    <!-- 版本 1.0.0 (2026-02-21) -->
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <h3 class="text-xl font-bold text-primary mb-3">版本 1.0.0 <span class="text-sm font-normal text-secondary">2026-02-21</span></h3>
+                        <div class="space-y-2">
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 初始版本发布，实现天选之子随机抽取工具</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 支持随机抽取学号、人名或同时展示学号+人名</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 支持单次抽取1人或多人，可自定义抽取人数</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 支持"不重复抽取"模式和"重置抽取池"功能</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 实现名字滚动动画，支持速度和持续时间调节</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 支持TXT和Excel文件导入名单</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 支持名单去重和多名单管理功能</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2"></i> 支持学号范围输入，自动生成连续学号列表</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 结果弹窗 -->
+    <div id="result-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="result-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="result-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="result-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark">抽取结果</h2>
+                <button id="result-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 弹窗内容 -->
+            <div class="p-6 text-center">
+                <div id="result-content" class="text-3xl font-bold text-primary mb-4"></div>
+                <div id="result-summary" class="text-secondary mt-4 hidden"></div>
+            </div>
+            
+            <!-- 弹窗底部 -->
+            <div class="p-4 border-t border-gray-200 flex justify-end">
+                <button id="result-confirm" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 确认弹窗 -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="confirm-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="confirm-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="confirm-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark">确认操作</h2>
+                <button id="confirm-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 弹窗内容 -->
+            <div class="p-6 text-center">
+                <div id="confirm-message" class="text-lg text-secondary mb-4"></div>
+            </div>
+            
+            <!-- 弹窗底部 -->
+            <div class="p-4 border-t border-gray-300 flex justify-end space-x-3">
+                <button id="confirm-cancel" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    取消
+                </button>
+                <button id="confirm-ok" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 编辑名单弹窗 -->
+    <div id="edit-list-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="edit-list-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="edit-list-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[80vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="edit-list-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark">编辑名单</h2>
+                <button id="edit-list-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fa fa-times text-secondary"></i>
+                </button>
+            </div>
+            
+            <!-- 弹窗内容 -->
+            <div class="p-6 overflow-y-auto">
+                <!-- 名单名称编辑 -->
+                <div class="mb-6">
+                    <label for="edit-list-name" class="block text-sm font-medium text-secondary mb-2">名单名称</label>
+                    <input type="text" id="edit-list-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                
+                <!-- 名单内容编辑 -->
+                <div class="mb-6">
+                    <label for="edit-list-content" class="block text-sm font-medium text-secondary mb-2">名单内容（每行一个人员，格式：学号 姓名）</label>
+                    <textarea id="edit-list-content" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" rows="10"></textarea>
+                    <p class="text-xs text-secondary mt-2">提示：每行一个人员，学号和姓名之间用空格分隔。如果没有姓名，只输入学号即可。</p>
+                </div>
+            </div>
+            
+            <!-- 弹窗底部 -->
+            <div class="p-4 border-t border-gray-300 flex justify-end space-x-3">
+                <button id="edit-list-cancel" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    取消
+                </button>
+                <button id="edit-list-save" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-2 max-w-6xl">
+        <div class="text-center text-gray-500 text-sm">天选之子 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
+    </div>
+
+    <!-- 通用脚本（必须） -->
+    <script src="../../assets/js/common.js"></script>
+    <!-- 工具特定脚本（可选） -->
+    <script src="assets/js/script.js"></script>
+    <script>
+        // 工具特定初始化代码
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化模态框
+            initModal('changelog-modal', 'changelog-btn', 'changelog-close', 'changelog-overlay');
+            initModal('dev-tools-modal', 'dev-tools-btn', 'dev-tools-close', 'dev-tools-overlay');
+            initModal('history-modal', 'history-btn', 'history-close', 'history-overlay');
+            initModal('result-modal', null, 'result-close', 'result-overlay');
+            initModal('confirm-modal', null, 'confirm-close', 'confirm-overlay');
+            initModal('edit-list-modal', null, 'edit-list-close', 'edit-list-overlay');
+            
+            // 初始化滚动速度滑块
+            const scrollSpeed = document.getElementById('scroll-speed');
+            const speedValue = document.getElementById('speed-value');
+            scrollSpeed.addEventListener('input', function() {
+                speedValue.textContent = this.value;
+            });
+            
+            // 初始化滚动持续时间滑块
+            const scrollDuration = document.getElementById('scroll-duration');
+            const durationValue = document.getElementById('duration-value');
+            scrollDuration.addEventListener('input', function() {
+                durationValue.textContent = this.value;
+            });
+            
+            // 初始化主逻辑
+            initTianXuanZhiZi();
+        });
+    </script>
+</body>
+</html>

@@ -125,5 +125,145 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
+// 显示提示消息
+function showToast(message) {
+    // 创建提示元素
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-4 right-4 bg-neutral-dark text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in';
+    toast.textContent = message;
+    
+    // 添加到页面
+    document.body.appendChild(toast);
+    
+    // 3秒后移除
+    setTimeout(() => {
+        toast.classList.add('slide-out');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
+
+// 文件大小格式化
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// 本地存储操作
+function storageGet(key, defaultValue = null) {
+    try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : defaultValue;
+    } catch (error) {
+        console.error('Error getting from localStorage:', error);
+        return defaultValue;
+    }
+}
+
+function storageSet(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+    } catch (error) {
+        console.error('Error setting to localStorage:', error);
+        return false;
+    }
+}
+
+function storageRemove(key) {
+    try {
+        localStorage.removeItem(key);
+        return true;
+    } catch (error) {
+        console.error('Error removing from localStorage:', error);
+        return false;
+    }
+}
+
+function storageClear() {
+    try {
+        localStorage.clear();
+        return true;
+    } catch (error) {
+        console.error('Error clearing localStorage:', error);
+        return false;
+    }
+}
+
+// 主题切换
+function toggleTheme() {
+    const body = document.body;
+    const isDark = body.classList.toggle('dark-theme');
+    
+    // 保存主题设置
+    storageSet('theme', isDark ? 'dark' : 'light');
+    
+    // 更新按钮图标
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        if (isDark) {
+            themeToggle.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换主题';
+        } else {
+            themeToggle.innerHTML = '<i class="fa fa-moon-o mr-2"></i> 切换主题';
+        }
+    }
+}
+
+// 加载主题设置
+function loadTheme() {
+    const theme = storageGet('theme', 'light');
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换主题';
+        }
+    }
+}
+
+// 模态框操作
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+// 渲染更新日志
+function renderChangelog(changelogData, containerId) {
+    const changelogContent = document.getElementById(containerId);
+    if (!changelogContent) return;
+    
+    changelogContent.innerHTML = '';
+    
+    changelogData.forEach(item => {
+        const versionEl = document.createElement('div');
+        versionEl.className = 'bg-white p-4 rounded-lg shadow-sm';
+        
+        versionEl.innerHTML = `
+            <div class="flex justify-between items-center mb-3">
+                <h4 class="font-bold text-lg text-neutral-dark">版本 ${item.version}</h4>
+                <span class="text-sm text-secondary">${item.date}</span>
+            </div>
+            <ul class="space-y-2 text-gray-700">
+                ${item.changes.map(change => `<li class="flex items-start"><i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i><span>${change}</span></li>`).join('')}
+            </ul>
+        `;
+        
+        changelogContent.appendChild(versionEl);
+    });
+}
+
 // 当DOM加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', initApp);

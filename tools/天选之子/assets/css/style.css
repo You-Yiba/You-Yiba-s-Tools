@@ -1,0 +1,97 @@
+/* 天选之子工具特定样式 */
+
+/* 滚动动画效果 */
+@keyframes roll {
+    0% { transform: translateX(100%); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(-100%); opacity: 0; }
+}
+
+.rolling-animation {
+    animation: roll 0.5s linear infinite;
+}
+
+/* 平滑滚动 */
+#extracted-list {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.5) rgba(59, 130, 246, 0.1);
+}
+
+#extracted-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#extracted-list::-webkit-scrollbar-track {
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 3px;
+}
+
+#extracted-list::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.5);
+    border-radius: 3px;
+}
+
+#extracted-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.8);
+}
+
+/* 抽取结果条目样式 */
+.extracted-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.extracted-item:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.extracted-info {
+    flex: 1;
+}
+
+.extracted-id {
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.extracted-name {
+    font-weight: 500;
+    color: #334155;
+}
+
+
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+    .grid-cols-1.lg\:grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+    
+    #rolling-content {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    #rolling-content {
+        font-size: 1.5rem;
+    }
+    
+    .extracted-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .extracted-actions {
+        align-self: flex-end;
+    }
+}

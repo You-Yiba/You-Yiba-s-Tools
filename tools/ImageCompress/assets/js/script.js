@@ -34,36 +34,16 @@ const changelogData = [
             '支持预览对比功能',
             '支持单张和批量下载',
             '支持历史记录功能',
-            '支持主题切换功能',
             '添加开发者选项',
             '添加更新日志功能'
         ]
     }
 ];
 
-// 渲染更新日志
+// 渲染更新日志 - 使用通用函数
 function renderChangelog() {
-    const changelogContent = document.getElementById('changelog-content');
-    if (!changelogContent) return;
-    
-    changelogContent.innerHTML = '';
-    
-    changelogData.forEach(item => {
-        const versionEl = document.createElement('div');
-        versionEl.className = 'bg-white p-4 rounded-lg shadow-sm';
-        
-        versionEl.innerHTML = `
-            <div class="flex justify-between items-center mb-3">
-                <h4 class="font-bold text-lg text-neutral-dark">版本 ${item.version}</h4>
-                <span class="text-sm text-secondary">${item.date}</span>
-            </div>
-            <ul class="space-y-2 text-gray-700">
-                ${item.changes.map(change => `<li class="flex items-start"><i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i><span>${change}</span></li>`).join('')}
-            </ul>
-        `;
-        
-        changelogContent.appendChild(versionEl);
-    });
+    // 调用通用的渲染更新日志函数
+    renderChangelog(changelogData, 'changelog-content');
 }
 
 // 初始化函数
@@ -99,7 +79,7 @@ function initImageCompressApp() {
     downloadSingle = document.getElementById('download-single');
     downloadAll = document.getElementById('download-all');
     clearAll = document.getElementById('clear-all');
-    themeToggle = document.getElementById('theme-toggle');
+
     historyBtn = document.getElementById('history-btn');
     historyModal = document.getElementById('history-modal');
     historyOverlay = document.getElementById('history-overlay');
@@ -206,10 +186,7 @@ function initImageCompressApp() {
             clearAll.addEventListener('click', clearAllImages);
         }
         
-        // 主题切换
-        if (themeToggle) {
-            themeToggle.addEventListener('click', toggleTheme);
-        }
+
         
         // 历史记录按钮
         if (historyBtn) {
@@ -336,9 +313,7 @@ function initImageCompressApp() {
     loadHistory();
     console.log('历史记录加载完成');
     
-    // 加载主题设置
-    loadTheme();
-    console.log('主题设置加载完成');
+
 }
 
 // 拖拽上传处理
@@ -948,34 +923,7 @@ function clearAllImages() {
     if (noPreview) noPreview.classList.remove('hidden');
 }
 
-// 主题切换
-function toggleTheme() {
-    const body = document.body;
-    const isDark = body.classList.toggle('dark-theme');
-    
-    // 更新按钮图标
-    if (themeToggle) {
-        if (isDark) {
-            themeToggle.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换主题';
-        } else {
-            themeToggle.innerHTML = '<i class="fa fa-moon-o mr-2"></i> 切换主题';
-        }
-        
-        // 保存主题设置
-        localStorage.setItem('imageCompressTheme', isDark ? 'dark' : 'light');
-    }
-}
 
-// 加载主题设置
-function loadTheme() {
-    const theme = localStorage.getItem('imageCompressTheme');
-    if (theme === 'dark') {
-        document.body.classList.add('dark-theme');
-        if (themeToggle) {
-            themeToggle.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换主题';
-        }
-    }
-}
 
 // 保存到历史记录
 function saveToHistory(compressedInfo) {
@@ -997,15 +945,16 @@ function saveToHistory(compressedInfo) {
         history.splice(10);
     }
     
-    // 保存到localStorage
-    localStorage.setItem('imageCompressHistory', JSON.stringify(history));
+    // 保存到localStorage - 使用通用存储函数
+    storageSet('imageCompressHistory', history);
 }
 
 // 加载历史记录
 function loadHistory() {
     if (!historyList || !emptyHistory) return;
     
-    const history = JSON.parse(localStorage.getItem('imageCompressHistory') || '[]');
+    // 加载历史记录 - 使用通用存储函数
+    const history = storageGet('imageCompressHistory') || [];
     
     if (history.length === 0) {
         emptyHistory.classList.remove('hidden');
@@ -1049,52 +998,7 @@ function showError(message) {
     }
 }
 
-// 格式化文件大小
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// 格式化日期
-function formatDate(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// 初始化模态框
-function initModal(modalId, btnId, closeId, overlayId) {
-    const modal = document.getElementById(modalId);
-    const btn = btnId ? document.getElementById(btnId) : null;
-    const close = document.getElementById(closeId);
-    const overlay = document.getElementById(overlayId);
-    
-    if (btn) {
-        btn.addEventListener('click', function() {
-            modal.classList.remove('hidden');
-        });
-    }
-    
-    if (close) {
-        close.addEventListener('click', function() {
-            modal.classList.add('hidden');
-        });
-    }
-    
-    if (overlay) {
-        overlay.addEventListener('click', function() {
-            modal.classList.add('hidden');
-        });
-    }
-}
+// 注意：formatFileSize、formatDate 和 initModal 函数已移至通用 JavaScript 文件中
 
 // 当DOM加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', initImageCompressApp);
