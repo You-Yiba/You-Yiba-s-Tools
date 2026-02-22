@@ -46,7 +46,7 @@
         <!-- 工具展示区域 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             <!-- 工具卡片 1 -->
-            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="window.location.href='tools/Task!/Task!.html'">
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="recordToolUsage('Task!'); window.location.href='tools/Task!/Task!.html'">
                 <div class="flex flex-col items-center text-center">
                     <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                         <img src="tools/Task!/favicon.ico" alt="Task!" class="w-10 h-10">
@@ -62,7 +62,7 @@
             </div>
 
             <!-- 工具卡片 2 -->
-            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="window.location.href='tools/ImageCompress/ImageCompress.html'">
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="recordToolUsage('图片压缩'); window.location.href='tools/ImageCompress/ImageCompress.html'">
                 <div class="flex flex-col items-center text-center">
                     <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                         <i class="fa fa-compress text-3xl text-primary"></i>
@@ -78,7 +78,7 @@
             </div>
 
             <!-- 工具卡片 3 -->
-            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="window.location.href='tools/天选之子/天选之子.html'">
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="recordToolUsage('天选之子'); window.location.href='tools/天选之子/天选之子.html'">
                 <div class="flex flex-col items-center text-center">
                     <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                         <i class="fa fa-random text-3xl text-primary"></i>
@@ -93,17 +93,17 @@
                 </div>
             </div>
 
-            <!-- 工具卡片 4 (占位，用于后续添加工具) -->
-            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" style="opacity: 0.7;">
+            <!-- 工具卡片 4 -->
+            <div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in" onclick="recordToolUsage('插值计算器'); window.location.href='tools/InterpolationCalculator/InterpolationCalculator.html'">
                 <div class="flex flex-col items-center text-center">
-                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4">
-                        <i class="fa fa-plus text-3xl text-gray-400"></i>
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-calculator text-3xl text-primary"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-neutral-dark mb-2">工具名称</h2>
-                    <p class="text-secondary mb-4">工具描述，介绍工具的功能和用途</p>
+                    <h2 class="text-2xl font-bold text-neutral-dark mb-2">插值计算器</h2>
+                    <p class="text-secondary mb-4">支持多种插值算法，Excel数据导入导出，多变量配置</p>
                     <div class="mt-auto w-full">
-                        <button class="w-full bg-gray-400 cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-lock mr-2"></i> 即将上线
+                        <button class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            <i class="fa fa-arrow-right mr-2"></i> 打开工具
                         </button>
                     </div>
                 </div>
@@ -143,7 +143,15 @@
         </div>
 
         <!-- 功能按钮区域 -->
-        <div class="text-center mb-8 flex justify-center space-x-4">
+        <div class="text-center mb-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <div class="flex items-center space-x-2">
+                <span class="text-secondary">排序方式:</span>
+                <select id="sort-tools" class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="default">默认排序</option>
+                    <option value="count">按使用次数</option>
+                    <option value="lastUsed">按最近使用</option>
+                </select>
+            </div>
             <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-code mr-2"></i> 开发者选项
             </button>
@@ -158,6 +166,107 @@
     <script src="assets/js/common.js"></script>
 
     <script>
+        // 工具使用记录相关功能
+        function recordToolUsage(toolName) {
+            // 获取现有记录
+            const toolUsage = storageGet('toolUsage', {});
+            
+            // 更新使用记录
+            if (!toolUsage[toolName]) {
+                toolUsage[toolName] = {
+                    count: 0,
+                    lastUsed: null
+                };
+            }
+            
+            toolUsage[toolName].count += 1;
+            toolUsage[toolName].lastUsed = new Date().toISOString();
+            
+            // 保存记录
+            storageSet('toolUsage', toolUsage);
+        }
+
+        function getToolUsage() {
+            return storageGet('toolUsage', {});
+        }
+
+        function clearToolUsage() {
+            storageRemove('toolUsage');
+            return true;
+        }
+
+        function sortToolCards(sortBy) {
+            const toolContainer = document.querySelector('.grid');
+            if (!toolContainer) return;
+            
+            const toolCards = Array.from(toolContainer.querySelectorAll('.tool-card'));
+            const toolUsage = getToolUsage();
+            
+            // 排序工具卡片
+            toolCards.sort((a, b) => {
+                const toolNameA = a.querySelector('h2').textContent.trim();
+                const toolNameB = b.querySelector('h2').textContent.trim();
+                
+                const usageA = toolUsage[toolNameA] || { count: 0, lastUsed: null };
+                const usageB = toolUsage[toolNameB] || { count: 0, lastUsed: null };
+                
+                switch (sortBy) {
+                    case 'count':
+                        return usageB.count - usageA.count;
+                    case 'lastUsed':
+                        if (!usageA.lastUsed) return 1;
+                        if (!usageB.lastUsed) return -1;
+                        return new Date(usageB.lastUsed) - new Date(usageA.lastUsed);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // 重新排列卡片
+            toolCards.forEach(card => {
+                toolContainer.appendChild(card);
+            });
+        }
+
+        // 显示工具使用记录
+        function displayToolUsage() {
+            const toolUsageContainer = document.getElementById('tool-usage-container');
+            if (!toolUsageContainer) return;
+            
+            const toolUsage = getToolUsage();
+            const toolUsageList = document.getElementById('tool-usage-list');
+            
+            if (!toolUsageList) return;
+            
+            if (Object.keys(toolUsage).length === 0) {
+                toolUsageList.innerHTML = '<div class="text-center text-secondary py-4">暂无工具使用记录</div>';
+                return;
+            }
+            
+            toolUsageList.innerHTML = '';
+            
+            // 按使用次数排序
+            const sortedTools = Object.entries(toolUsage).sort((a, b) => b[1].count - a[1].count);
+            
+            sortedTools.forEach(([toolName, usage]) => {
+                const lastUsed = usage.lastUsed ? new Date(usage.lastUsed).toLocaleString() : '从未使用';
+                
+                const toolItem = document.createElement('div');
+                toolItem.className = 'flex justify-between items-center p-3 bg-white rounded-lg shadow-sm mb-2';
+                toolItem.innerHTML = `
+                    <div>
+                        <h4 class="font-medium text-neutral-dark">${toolName}</h4>
+                        <p class="text-sm text-secondary">最后使用: ${lastUsed}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-primary">${usage.count} 次</p>
+                    </div>
+                `;
+                
+                toolUsageList.appendChild(toolItem);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化开发者工具弹窗
             initModal('dev-tools-modal', 'dev-tools-btn', 'dev-tools-close', 'dev-tools-overlay');
@@ -167,6 +276,35 @@
             if (devToolsBtn) {
                 devToolsBtn.addEventListener('click', function() {
                     displayBrowserInfo();
+                    displayToolUsage();
+                });
+            }
+
+            // 工具排序功能
+            const sortToolsSelect = document.getElementById('sort-tools');
+            if (sortToolsSelect) {
+                // 加载保存的排序方式
+                const savedSortBy = storageGet('toolSortBy', 'default');
+                sortToolsSelect.value = savedSortBy;
+                sortToolCards(savedSortBy);
+                
+                // 保存排序方式到localStorage
+                sortToolsSelect.addEventListener('change', function() {
+                    const sortBy = this.value;
+                    sortToolCards(sortBy);
+                    storageSet('toolSortBy', sortBy);
+                });
+            }
+
+            // 清空工具使用记录按钮
+            const clearToolUsageBtn = document.getElementById('clear-tool-usage');
+            if (clearToolUsageBtn) {
+                clearToolUsageBtn.addEventListener('click', function() {
+                    if (confirm('确定要清空所有工具使用记录吗？')) {
+                        clearToolUsage();
+                        displayToolUsage();
+                        showToast('工具使用记录已清空');
+                    }
                 });
             }
 
@@ -215,6 +353,19 @@
                             <span class="text-secondary">操作系统</span>
                             <span id="operating-system" class="font-medium">-</span>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- 工具使用记录 -->
+                <div id="tool-usage-container" class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">工具使用记录</h3>
+                        <button id="clear-tool-usage" class="bg-accent hover:bg-accent/90 text-white font-medium py-1 px-3 rounded-lg transition-colors text-sm flex items-center">
+                            <i class="fa fa-trash mr-1"></i> 清空记录
+                        </button>
+                    </div>
+                    <div id="tool-usage-list" class="bg-gray-50 p-4 rounded-lg">
+                        <!-- 工具使用记录将通过JavaScript动态生成 -->
                     </div>
                 </div>
                 

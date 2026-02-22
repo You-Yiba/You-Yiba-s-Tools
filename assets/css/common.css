@@ -9,9 +9,21 @@
     /* 工具卡片 */
     .tool-card {
         transition: all 0.3s ease;
+        position: relative;
+        min-height: 320px;
     }
     .tool-card:hover {
         transform: translateY(-5px);
+    }
+    .tool-card .flex.flex-col {
+        min-height: 100%;
+    }
+    .tool-card .mt-auto.w-full {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 0;
+        right: 0;
+        padding: 0 1.5rem;
     }
     
     /* 动画效果 */

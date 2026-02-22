@@ -265,5 +265,7 @@ function renderChangelog(changelogData, containerId) {
     });
 }
 
+
+
 // 当DOM加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', initApp);

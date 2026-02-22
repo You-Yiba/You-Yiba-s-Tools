@@ -1,331 +1,94 @@
-# 游一八工具箱设计规范
+# 游一八工具箱添加工具规范
 
-## 1. 配色方案
+## 1. 核心原则
 
-### 主色调
-- **primary**: #3b82f6 (蓝色) - 用于主要按钮、图标和强调元素
-- **secondary**: #64748b (灰色) - 用于次要文本、标签和边框
-- **accent**: #f43f5e (红色) - 用于警告、错误和删除操作
-- **neutral**: #f1f5f9 (浅灰色) - 用于背景和卡片
-- **neutral-dark**: #334155 (深灰色) - 用于主要文本
+### 1.1 代码复用优先
+- **必须优先**使用 `assets` 文件夹内的可复用资源
+- **CSS 复用**: 优先使用 `../../assets/css/common.css` 中定义的样式类
+- **JavaScript 复用**: 优先使用 `../../assets/js/common.js` 中提供的函数
+- 仅在需要工具特定功能时才创建本地样式和脚本文件
 
-### 背景色
-- 全局背景: `bg-gradient-to-br from-blue-50 to-indigo-100` - 从浅蓝色到靛蓝色的渐变
-- 卡片背景: 白色或玻璃态效果
-- 表单背景: 白色
-- 模态框背景: 玻璃态效果
+### 1.2 一致性原则
+- 保持与现有工具一致的界面风格和用户体验
+- 遵循统一的命名规范和目录结构
+- 确保所有工具使用相同的技术栈和依赖管理方式
 
-### 功能色
-- 已完成任务: 绿色 (#10b981)
-- 待完成任务: 主色调蓝色 (#3b82f6)
-- 逾期任务: 强调色红色 (#f43f5e)
+### 1.3 文档同步
+- **必须**更新工具的更新日志
+- **必须**更新 `readme.md` 中的工具信息
+- 确保文档与实际功能保持同步
 
-## 2. UI设计
+## 2. 工具添加流程
 
-### 整体风格
-- **现代简约** - 干净的界面，充分利用空白空间
-- **响应式设计** - 适配不同屏幕尺寸
-- **卡片式布局** - 模块化设计，每个功能区块独立成卡片
-- **玻璃态效果** - 使用 `glass-effect` 类实现半透明模糊效果
-- **阴影层次** - 使用不同层级的阴影区分元素优先级
-  - `shadow-card`: 基础卡片阴影
-  - `shadow-card-hover`: 悬停时的增强阴影
+### 2.1 创建目录结构
+1. 在 `tools` 文件夹下新建一个文件夹，命名为当前工具的名称（使用驼峰命名或 Pascal 命名，保持一致性）
+2. 在工具目录内创建以下结构：
+   ```
+   tools/工具名称/
+   ├── 工具名称.html        # 工具主页面
+   └── assets/             # 工具特定资源（可选）
+       ├── css/
+       │   └── style.css   # 工具特定样式（仅在需要时创建）
+       └── js/
+           └── script.js   # 工具特定脚本（仅在需要时创建）
+   ```
 
-### 组件设计
+### 2.2 更新主页卡片
+1. 在 `index.html` 中复制工具卡片模板
+2. 如果有"即将上线"字样的卡片，则替换为当前工具
+3. 修改工具名称、描述、图标路径和按钮链接
+4. 确保添加 `recordToolUsage('工具名称')` 点击事件
 
-#### 按钮
-- **主要按钮**: 蓝色背景，白色文字，悬停时背景透明度降低
-- **次要按钮**: 灰色背景，白色文字
-- **危险按钮**: 红色背景，白色文字
-- **禁用按钮**: 灰色背景，降低透明度，cursor-not-allowed
+### 2.3 创建工具页面
+1. **复制现有工具页面**（如 `ImageCompress.html` 或 `Task!.html`）作为模板
+2. 修改页面标题、描述和具体功能实现
+3. **必须**保持以下引用结构：
+   ```html
+   <!-- 引入通用样式（必须） -->
+   <link rel="stylesheet" href="../../assets/css/common.css">
+   <!-- 引入工具特定样式（可选） -->
+   <link rel="stylesheet" href="assets/css/style.css">
+   
+   <!-- 引入通用脚本（必须） -->
+   <script src="../../assets/js/common.js"></script>
+   <!-- 引入工具特定脚本（可选） -->
+   <script src="assets/js/script.js"></script>
+   ```
 
-#### 卡片
-- 圆角: `rounded-xl`
-- 内边距: `p-6`
-- 阴影: `shadow-card`
-- 悬停效果: `hover:shadow-card-hover`
-- 玻璃态: `glass-effect`
+### 2.4 更新文档
+1. **更新 readme.md**：添加工具卡片，包括工具名称、描述、图标路径和按钮链接
+2. **更新更新日志**：在工具页面的 `changelogData` 中添加初始版本记录
 
-#### 表单元素
-- 输入框: 浅灰色边框，聚焦时蓝色边框和阴影
-- 标签: 次要文本颜色，小字体
-- 选择框: 与输入框风格一致
-- 单选按钮: 自定义样式，选中时蓝色
+## 3. 资源复用规范
 
-#### 模态框
-- 居中定位: `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`
-- 背景遮罩: 黑色半透明 `bg-black bg-opacity-50`
-- 玻璃态容器: `glass-effect`
-- 最大宽度和高度限制
-- 可拖动头部
+### 3.1 CSS 复用
+- **优先**使用 `../../assets/css/common.css` 中定义的样式类
+- 包括：玻璃效果、动画效果、滚动条样式、主题切换样式、模态框样式等
+- 仅在需要工具特定样式时才在本地 `style.css` 中添加
+- 避免重复定义已在 `common.css` 中存在的样式
 
-### 排版
-- **字体**: Inter, system-ui, sans-serif
-- **标题层级**:
-  - H1: 4-5xl, 粗体, 主色调
-  - H2: 2xl, 粗体, 深灰色
-  - H3: lg, 半粗体, 深灰色
-- **正文**: 16px, 深灰色
-- **次要文本**: 14px, 灰色
-- **辅助文本**: 12px, 浅灰色
+### 3.2 JavaScript 复用
+- **优先**使用 `../../assets/js/common.js` 中提供的函数
+- 推荐复用的功能：
+  - `initModal()` - 通用弹窗控制
+  - `openModal()`, `closeModal()` - 模态框操作
+  - `storageGet()`, `storageSet()`, `storageRemove()`, `storageClear()` - 本地存储操作
+  - `formatDate()` - 日期格式化
+  - `formatFileSize()` - 文件大小格式化
+  - `showToast()` - 显示提示消息
+  - `getBrowserInfo()` - 获取浏览器信息
+  - `renderChangelog()` - 渲染更新日志
+  - `toggleTheme()`, `loadTheme()` - 主题切换功能
+- 在工具特定脚本中仅实现工具核心逻辑
 
-### 图标
-- 使用 Font Awesome 4.7.0
-- 图标颜色与文本颜色保持一致
-- 图标大小根据上下文调整
+### 3.3 HTML 结构复用
+- 复用现有的页面布局结构，包括头部、功能按钮区域、主要内容区、弹窗和底部信息
+- 复用现有的模态框结构，如历史记录、开发者工具、更新日志等
+- 保持一致的卡片样式和交互模式
 
-## 3. 页面结构
+## 4. 工具页面模板
 
-### 通用结构
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <!-- 元数据和外部资源 -->
-    <!-- Tailwind CSS 配置 -->
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
-    <div class="container mx-auto px-4 py-8 max-w-[size]">
-        <!-- 顶部信息区 -->
-        <header class="mb-[spacing] text-center">
-            <h1 class="text-[size] font-bold text-primary mb-[spacing]">标题</h1>
-            <p class="text-[size] text-secondary max-w-[size] mx-auto">描述</p>
-        </header>
-
-        <!-- 主要内容区 -->
-        <div class="[layout]">
-            <!-- 功能模块 -->
-        </div>
-
-        <!-- 功能按钮区域 -->
-        <div class="text-center mb-[spacing] flex justify-center space-x-4">
-            <!-- 按钮组 -->
-        </div>
-
-        <!-- 底部信息区 -->
-        <footer class="text-center text-gray-500 text-sm">
-            <p>版权信息</p>
-        </footer>
-    </div>
-
-    <!-- 脚本 -->
-    <script src="assets/js/common.js"></script>
-    <script>
-        // 页面特定脚本
-    </script>
-
-    <!-- 模态框 -->
-    <!-- 开发者工具弹窗 -->
-    <!-- 其他弹窗 -->
-</body>
-</html>
-```
-
-### 工具卡片结构 (index.html)
-```html
-<div class="tool-card glass-effect rounded-xl shadow-card hover:shadow-card-hover p-6 cursor-pointer fade-in">
-    <div class="flex flex-col items-center text-center">
-        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <img src="path/to/icon" alt="工具图标" class="w-10 h-10">
-        </div>
-        <h2 class="text-2xl font-bold text-neutral-dark mb-2">工具名称</h2>
-        <p class="text-secondary mb-4">工具描述</p>
-        <div class="mt-auto w-full">
-            <button class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
-                <i class="fa fa-arrow-right mr-2"></i> 打开工具
-            </button>
-        </div>
-    </div>
-</div>
-```
-### 更新日志弹窗结构
-```html
-<!-- 更新日志弹窗 -->
-    <div id="changelog-modal" class="fixed inset-0 z-50 hidden">
-        <!-- 遮罩层 -->
-        <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
-        
-        <!-- 弹窗容器 -->
-        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
-            <!-- 弹窗头部 -->
-            <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
-                    <i class="fa fa-list-alt mr-2 text-secondary"></i> 更新日志
-                </h2>
-                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <i class="fa fa-times text-secondary"></i>
-                </button>
-            </div>
-            
-            <!-- 更新日志内容 -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <div id="changelog-content" class="space-y-6">
-                    <!-- 更新日志将通过JavaScript动态生成 -->
-                </div>
-            </div>
-        </div>
-    </div>
-```
-
-
-## 4. 功能实现
-
-### 数据存储
-- 使用 `localStorage` 存储任务和历史记录数据
-- 数据格式: JSON
-
-
-### 核心功能实现
-
-
-####  开发者工具
-- 添加测试数据功能
-- 数据导入导出
-- 清空所有数据
-- 其他调试功能
-
-#### 更新日志
-- 记录每次更新的功能添加、修复和改进
-- 提供版本号和日期信息
-
-### 交互实现
-
-#### 事件处理
-- 使用 `addEventListener` 绑定事件
-- 事件委托处理动态生成的元素
-- 表单提交事件处理
-- 按钮点击事件处理
-
-#### 动画效果
-- 淡入效果: `fade-in` 类
-- 悬停效果: `hover:` 伪类
-- 过渡动画: `transition-colors` 等
-
-#### 模态框
-- 使用 `initModal` 函数初始化模态框
-- 实现模态框的显示/隐藏
-- 实现模态框的拖动功能
-- 点击遮罩层关闭模态框
-
-
-
-## 5. 响应式设计
-
-### 断点设置
-- **sm**: 640px - 小屏幕手机
-- **lg**: 1024px - 平板和桌面
-
-### 布局调整
-- 在小屏幕上使用单列布局
-- 在大屏幕上使用多列网格布局
-- 调整容器最大宽度以适应不同屏幕
-- 调整字体大小和间距
-
-### 交互优化
-- 触摸设备优化
-- 按钮大小适合手指点击
-- 合理的点击区域
-
-## 6. 性能优化
-
-### 代码组织
-- 模块化JavaScript代码
-- 优先使用assets中的可复用代码
-- 分离通用功能到 common.js
-- 页面特定功能在各自页面实现
-
-### 渲染优化
-- 批量DOM操作
-- 使用文档片段减少重排
-- 避免频繁的localStorage操作
-
-### 加载优化
-- 使用CDN加载外部资源
-- 最小化内联脚本
-- 延迟加载非关键资源
-
-## 7. 可访问性
-
-### 语义化HTML
-- 使用适当的HTML标签
-- 合理的标题层级
-- 表单标签关联
-
-### 键盘导航
-- 支持Tab键导航
-- 支持Enter键提交表单
-- 模态框可通过Esc键关闭
-
-### 屏幕阅读器
-- 添加适当的ARIA属性
-- 确保颜色对比度符合标准
-- 提供文本替代方案
-
-## 8. 工具开发规范
-
-### 工具添加流程
-1. **创建目录结构**
-   - 在tools文件夹下新建一个文件夹，命名为当前工具的名称（使用驼峰命名或 Pascal 命名，保持一致性）
-   - 在工具目录内创建以下结构：
-     ```
-     tools/工具名称/
-     ├── 工具名称.html        # 工具主页面
-     └── assets/
-         ├── css/
-         │   └── style.css   # 工具特定样式（可选）
-         └── js/
-             └── script.js   # 工具特定脚本（可选）
-     ```
-
-2. **更新主页卡片**
-   - 在 index.html 中复制工具卡片模板，如果有"即将上线"字样的卡片，则替换为当前工具
-   - 修改工具名称、描述、图标路径和按钮链接
-
-3. **创建工具页面**
-   - 复制现有工具页面（如 ImageCompress.html 或 Task!.html）作为模板
-   - 修改页面标题、描述和具体功能实现
-   - **必须**保持以下引用结构：
-     ```html
-     <!-- 引入通用样式 -->
-     <link rel="stylesheet" href="../../assets/css/common.css">
-     <!-- 引入工具特定样式（可选） -->
-     <link rel="stylesheet" href="assets/css/style.css">
-     
-     <!-- 引入通用脚本 -->
-     <script src="../../assets/js/common.js"></script>
-     <!-- 引入工具特定脚本（可选） -->
-     <script src="assets/js/script.js"></script>
-     ```
-4. **添加工具到readme.md**
-   - 在readme.md中添加工具卡片，包括工具名称、描述、图标路径和按钮链接
-
-### 代码复用规范
-
-#### 必须复用的资源
-1. **CSS 复用**
-   - **优先**使用 `../../assets/css/common.css` 中定义的样式类
-   - 包括：玻璃效果、动画效果、滚动条样式、主题切换样式、模态框样式等
-   - 仅在需要工具特定样式时才在本地 style.css 中添加
-
-2. **JavaScript 复用**
-   - **优先**使用 `../../assets/js/common.js` 中提供的函数
-   - 推荐复用的功能：
-     - `initModal()` - 通用弹窗控制
-     - `openModal()`, `closeModal()` - 模态框操作
-     - `storageGet()`, `storageSet()`, `storageRemove()`, `storageClear()` - 本地存储操作
-     - `formatDate()` - 日期格式化
-     - `formatFileSize()` - 文件大小格式化
-     - `showToast()` - 显示提示消息
-     - `getBrowserInfo()` - 获取浏览器信息
-     - `renderChangelog()` - 渲染更新日志
-     - `toggleTheme()`, `loadTheme()` - 主题切换功能
-
-3. **HTML 结构复用**
-   - 复用现有的页面布局结构，包括头部、功能按钮区域、主要内容区、弹窗和底部信息
-   - 复用现有的模态框结构，如历史记录、开发者工具、更新日志等
-   - 保持一致的卡片样式和交互模式
-
-#### 工具页面模板
+### 4.1 完整模板
 ```html
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -377,10 +140,6 @@
 
         <!-- 功能按钮区域 -->
         <div class="text-center mb-8 flex justify-center space-x-4">
-            <!-- 主题切换按钮（推荐） -->
-            <button id="theme-toggle" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-moon-o mr-2"></i> 切换主题
-            </button>
             <!-- 历史记录按钮（可选） -->
             <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-history mr-2"></i> 历史记录
@@ -502,6 +261,20 @@
     <!-- 工具特定脚本（可选） -->
     <script src="assets/js/script.js"></script>
     <script>
+        // 更新日志数据（必须）
+        const changelogData = [
+            {
+                version: '1.0.0',
+                date: '发布日期', // 例如: '2026-02-01',
+                changes: [
+                    '添加工具核心功能',
+                    '优化用户界面',
+                    '实现历史记录功能'
+                ]
+            }
+            // 后续版本更新记录...
+        ];
+
         // 工具特定初始化代码
         document.addEventListener('DOMContentLoaded', function() {
             // 加载主题设置
@@ -524,39 +297,84 @@
 </html>
 ```
 
-### 代码复用最佳实践
+## 5. 更新日志规范
 
-1. **样式复用**
-   - 使用 `common.css` 中定义的颜色变量和工具类
-   - 优先使用玻璃效果、动画效果等通用样式
-   - 仅在需要工具特定样式时才添加到本地 style.css
+### 5.1 数据结构
+```javascript
+const changelogData = [
+    {
+        version: '版本号', // 例如: '1.0.0',
+        date: '发布日期', // 例如: '2026-02-01',
+        changes: [
+            '更新内容1',
+            '更新内容2',
+            '更新内容3'
+        ]
+    }
+    // 更多版本记录...
+];
+```
 
-2. **脚本复用**
-   - 使用 `common.js` 中提供的函数处理通用功能
-   - 避免重复实现本地存储、模态框控制等功能
-   - 在工具特定脚本中仅实现工具核心逻辑
+### 5.2 更新要求
+- **每次添加工具**：必须在 `changelogData` 中添加初始版本记录
+- **每次功能更新**：必须在 `changelogData` 中添加新版本记录
+- **版本号规则**：使用语义化版本号（Major.Minor.Patch）
+- **日期格式**：使用 ISO 格式（YYYY-MM-DD）
+- **更新内容**：清晰描述功能添加、修复和改进
 
-3. **功能复用**
-   - 复用现有的弹窗结构（历史记录、开发者工具、更新日志）
-   - 复用主题切换功能
-   - 复用本地存储操作函数
+## 6. README.md 更新规范
 
-### 性能优化
+### 6.1 工具卡片添加
+在 `readme.md` 中添加工具卡片，包括：
+- 工具名称
+- 工具描述
+- 图标路径
+- 按钮链接
+
+### 6.2 格式要求
+- 保持与现有工具卡片一致的格式
+- 确保链接路径正确
+- 提供清晰的工具功能说明
+
+## 7. 最佳实践
+
+### 7.1 代码组织
+- 模块化JavaScript代码
+- 优先使用assets中的可复用代码
+- 分离通用功能到 common.js
+- 页面特定功能在各自页面实现
+
+### 7.2 性能优化
 - 最小化工具特定的CSS和JavaScript代码
 - 优先使用CDN加载第三方库
 - 避免重复的DOM操作
 - 使用事件委托处理动态生成的元素
 
-## 9. 未来扩展
+### 7.3 用户体验
+- 保持一致的界面风格
+- 提供清晰的操作反馈
+- 实现合理的错误处理
+- 确保响应式设计适配不同设备
 
-### 功能扩展
-- 添加用户账户系统
-- 实现数据同步功能
-- 添加更多统计图表
-- 支持任务分类和标签管理
+## 8. 技术规范
 
-### 样式定制
-- 在 tailwind.config 中扩展主题
-- 添加自定义工具类
-- 实现主题切换功能
+### 8.1 技术栈
+- HTML5
+- CSS3 (Tailwind CSS v3)
+- JavaScript (ES6+)
+- Font Awesome 4.7.0
 
+### 8.2 数据存储
+- 使用 `localStorage` 存储任务和历史记录数据
+- 数据格式: JSON
+
+### 8.3 响应式设计
+- **sm**: 640px - 小屏幕手机
+- **lg**: 1024px - 平板和桌面
+
+### 8.4 可访问性
+- 使用适当的HTML标签
+- 合理的标题层级
+- 表单标签关联
+- 支持键盘导航
+- 确保颜色对比度符合标准

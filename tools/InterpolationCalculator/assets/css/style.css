@@ -1,0 +1,138 @@
+/* 插值计算器特定样式 */
+
+/* 玻璃态效果增强 */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* 淡入动画 */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 表格样式增强 */
+table {
+    border-collapse: collapse;
+}
+
+table th, table td {
+    transition: all 0.2s ease;
+}
+
+table tr:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* 按钮悬停效果 */
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* 输入框聚焦效果 */
+input:focus, select:focus {
+    transition: all 0.2s ease;
+}
+
+/* 进度条动画 */
+@keyframes progress {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+#progress-fill {
+    transition: width 0.3s ease;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    h1 {
+        font-size: 2.5rem !important;
+    }
+
+    h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .flex {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .flex space-x-4 {
+        space-x: 0;
+        space-y: 1rem;
+    }
+}
+
+/* 数据预览样式 */
+#data-preview {
+    transition: all 0.3s ease;
+}
+
+/* 结果表格样式 */
+#results-table {
+    font-size: 0.875rem;
+}
+
+#results-table th {
+    font-weight: 600;
+}
+
+#results-table td {
+    white-space: nowrap;
+}
+
+/* 历史记录项样式 */
+.history-item {
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s ease;
+}
+
+.history-item:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 错误提示样式 */
+.error-message {
+    color: #f43f5e;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* 成功提示样式 */
+.success-message {
+    color: #10b981;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
