@@ -94,16 +94,18 @@ function displayBrowserInfo() {
 // 通用弹窗控制功能
 function initModal(modalId, btnId, closeId, overlayId) {
     const modal = document.getElementById(modalId);
-    const btn = document.getElementById(btnId);
+    const btn = btnId ? document.getElementById(btnId) : null;
     const close = document.getElementById(closeId);
     const overlay = document.getElementById(overlayId);
 
-    if (!modal || !btn || !close || !overlay) return;
+    if (!modal || !close || !overlay) return;
 
-    // 打开弹窗
-    btn.addEventListener('click', function() {
-        modal.classList.remove('hidden');
-    });
+    // 打开弹窗（如果有按钮）
+    if (btn) {
+        btn.addEventListener('click', function() {
+            modal.classList.remove('hidden');
+        });
+    }
 
     // 关闭弹窗
     function closeModal() {
