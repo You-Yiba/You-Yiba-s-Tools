@@ -14,18 +14,29 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3b82f6',
-                        secondary: '#64748b',
-                        accent: '#f43f5e',
-                        neutral: '#f1f5f9',
-                        'neutral-dark': '#334155'
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                        success: '#4cc9f0',
+                        warning: '#f72585',
+                        error: '#f8961e',
+                        neutral: '#f8f9fa',
+                        'neutral-dark': '#212529',
+                        'neutral-gray': '#6c757d',
+                        'neutral-light': '#e9ecef'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif']
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
                     },
                     boxShadow: {
                         'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.15)'
+                    },
+                    backdropBlur: {
+                        'glass': '4px'
                     }
                 }
             }
@@ -35,13 +46,24 @@
     <link rel="stylesheet" href="../../assets/css/common.css">
     <!-- 工具特定样式（可选） -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
+<body class="bg-gradient-to-br from-primary/5 to-secondary/5 min-h-screen font-sans text-neutral-dark">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 顶部导航栏 -->
+        <nav class="mb-8 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center space-x-2 text-primary hover:text-secondary transition-colors">
+                <i class="fa fa-arrow-left text-xl"></i>
+                <span class="font-bold font-display hidden sm:inline">返回主页</span>
+            </a>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-primary fade-in">天选之子</h1>
+            <div class="w-16"></div> <!-- 占位，保持标题居中 -->
+        </nav>
+        
         <!-- 顶部信息区 -->
         <header class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-primary mb-2 fade-in">天选之子</h1>
-            <p class="text-xl text-secondary max-w-2xl mx-auto fade-in">
+            <p class="text-xl text-neutral-gray max-w-2xl mx-auto fade-in">
                 随机抽取人员工具，适用于课堂点名、活动抽奖等场景
             </p>
         </header>
@@ -49,20 +71,20 @@
         <!-- 功能按钮区域 -->
         <div class="text-center mb-8 flex justify-center space-x-4">
             <!-- 历史记录按钮（可选） -->
-            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            <button id="history-btn" class="bg-accent hover:bg-primary text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-history mr-2"></i> 历史记录
             </button>
             <!-- 开发者选项按钮（推荐） -->
-            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            <button id="dev-tools-btn" class="bg-secondary hover:bg-primary text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-code mr-2"></i> 开发者选项
             </button>
         </div>
 
         <!-- 主要内容区 -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <!-- 左侧：名单管理 -->
-            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
-                <h2 class="text-2xl font-bold text-neutral-dark mb-4">名单管理</h2>
+            <div class="backdrop-blur-glass bg-white/70 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-4 sm:p-6 animate-fade-in-up">
+                <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">名单管理</h2>
                 
                 <!-- 名单导入 -->
                 <div class="mb-6">
@@ -149,8 +171,8 @@
             </div>
             
             <!-- 中间：抽取设置 -->
-            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
-                <h2 class="text-2xl font-bold text-neutral-dark mb-4">抽取设置</h2>
+            <div class="backdrop-blur-glass bg-white/70 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-4 sm:p-6 animate-fade-in-up animation-delay-200">
+                <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">抽取设置</h2>
                 
                 <!-- 抽取类型 -->
                 <div class="mb-6">
@@ -211,14 +233,14 @@
             </div>
             
             <!-- 右侧：结果展示 -->
-            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
-                <h2 class="text-2xl font-bold text-neutral-dark mb-4">结果展示</h2>
+            <div class="backdrop-blur-glass bg-white/70 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-4 sm:p-6 animate-fade-in-up animation-delay-400">
+                <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">结果展示</h2>
                 
                 <!-- 滚动区域 -->
-                <div class="mb-6">
+                <div class="mb-4 sm:mb-6">
                     <h3 class="text-lg font-semibold mb-3">滚动展示</h3>
-                    <div id="rolling-area" class="h-32 bg-white rounded-lg flex items-center justify-center overflow-hidden shadow-inner">
-                        <div id="rolling-content" class="text-3xl font-bold text-primary">点击开始抽取</div>
+                    <div id="rolling-area" class="h-24 sm:h-32 bg-white rounded-lg flex items-center justify-center overflow-hidden shadow-inner">
+                        <div id="rolling-content" class="text-2xl sm:text-3xl font-bold text-primary">点击开始抽取</div>
                     </div>
                 </div>
                 
@@ -242,7 +264,7 @@
         <div id="history-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="history-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -317,7 +339,7 @@
         <div id="dev-tools-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -356,7 +378,7 @@
         <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -395,7 +417,7 @@
         <div id="result-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="result-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="result-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="result-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark">抽取结果</h2>
@@ -425,7 +447,7 @@
         <div id="confirm-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="confirm-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="confirm-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="confirm-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark">确认操作</h2>
@@ -457,7 +479,7 @@
         <div id="edit-list-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="edit-list-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[80vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="edit-list-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[80vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="edit-list-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark">编辑名单</h2>
@@ -494,9 +516,28 @@
         </div>
     </div>
     
-    <div class="container mx-auto px-4 py-2 max-w-6xl">
-        <div class="text-center text-gray-500 text-sm">天选之子 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
-    </div>
+    <!-- 底部信息区 -->
+    <footer class="text-center py-8 border-t border-neutral-light animate-fade-in-up">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <div class="flex items-center space-x-2 text-primary font-medium">
+                <i class="fa fa-wrench text-xl"></i>
+                <span class="text-lg font-display">游一八工具箱</span>
+            </div>
+            <p class="text-neutral-gray text-sm">遇到问题不要慌，打开一八工具箱</p>
+            <div class="flex space-x-4 mt-2">
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-github text-lg"></i>
+                </a>
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-twitter text-lg"></i>
+                </a>
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-envelope text-lg"></i>
+                </a>
+            </div>
+            <p class="text-neutral-gray text-xs mt-4">© 2026 游一八工具箱 作者:游一八 power by Trae</p>
+        </div>
+    </footer>
 
     <!-- 通用脚本（必须） -->
     <script src="../../assets/js/common.js"></script>

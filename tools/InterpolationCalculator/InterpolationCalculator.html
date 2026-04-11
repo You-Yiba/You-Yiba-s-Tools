@@ -16,18 +16,29 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3b82f6',
-                        secondary: '#64748b',
-                        accent: '#f43f5e',
-                        neutral: '#f1f5f9',
-                        'neutral-dark': '#334155'
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                        success: '#4cc9f0',
+                        warning: '#f72585',
+                        error: '#f8961e',
+                        neutral: '#f8f9fa',
+                        'neutral-dark': '#212529',
+                        'neutral-gray': '#6c757d',
+                        'neutral-light': '#e9ecef'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif']
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
                     },
                     boxShadow: {
                         'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.15)'
+                    },
+                    backdropBlur: {
+                        'glass': '4px'
                     }
                 }
             }
@@ -37,13 +48,24 @@
     <link rel="stylesheet" href="../../assets/css/common.css">
     <!-- 工具特定样式（可选） -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
+<body class="bg-gradient-to-br from-primary/5 to-secondary/5 min-h-screen font-sans text-neutral-dark">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 顶部导航栏 -->
+        <nav class="mb-8 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center space-x-2 text-primary hover:text-secondary transition-colors">
+                <i class="fa fa-arrow-left text-xl"></i>
+                <span class="font-bold font-display hidden sm:inline">返回主页</span>
+            </a>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-primary fade-in">插值计算器</h1>
+            <div class="w-16"></div> <!-- 占位，保持标题居中 -->
+        </nav>
+        
         <!-- 顶部信息区 -->
         <header class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-primary mb-2 fade-in">插值计算器</h1>
-            <p class="text-xl text-secondary max-w-2xl mx-auto fade-in">
+            <p class="text-xl text-neutral-gray max-w-2xl mx-auto fade-in">
                 根据已知数据点，计算未知数据点的数值，适用于数据分析、预测等场景
             </p>
         </header>
@@ -51,11 +73,11 @@
         <!-- 功能按钮区域 -->
         <div class="text-center mb-8 flex justify-center space-x-4">
             <!-- 历史记录按钮（可选） -->
-            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            <button id="history-btn" class="bg-accent hover:bg-primary text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-history mr-2"></i> 历史记录
             </button>
             <!-- 开发者选项按钮（推荐） -->
-            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            <button id="dev-tools-btn" class="bg-secondary hover:bg-primary text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-code mr-2"></i> 开发者选项
             </button>
         </div>
@@ -63,14 +85,14 @@
         <!-- 主要内容区 -->
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-12">
             <!-- 工具功能区域 -->
-            <div class="glass-effect rounded-xl shadow-card p-6 fade-in">
+            <div class="backdrop-blur-glass bg-white/70 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-4 sm:p-6 animate-fade-in-up">
                 <!-- 数据导入与预处理 -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-neutral-dark mb-4">1. 数据导入与预处理</h2>
-                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                <div class="mb-6 sm:mb-8">
+                    <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">1. 数据导入与预处理</h2>
+                    <div class="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
                         <div class="mb-4">
                             <label class="block text-secondary mb-2">选择Excel文件 (.xlsx, .xls)</label>
-                            <div class="flex items-center space-x-4">
+                            <div class="flex flex-col sm:flex-row items-center gap-3 sm:space-x-4">
                                 <input type="file" id="file-input" accept=".xlsx,.xls" class="flex-1 py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                                 <button id="import-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                                     <i class="fa fa-upload mr-2"></i> 导入数据
@@ -96,17 +118,17 @@
                 </div>
 
                 <!-- 变量配置与映射 -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-neutral-dark mb-4">2. 变量配置与映射</h2>
-                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                <div class="mb-6 sm:mb-8">
+                    <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">2. 变量配置与映射</h2>
+                    <div class="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
                         <div class="mb-4">
                             <label class="block text-secondary mb-2">变量配置</label>
                             <div class="overflow-x-auto">
                                 <table class="min-w-full border border-gray-200">
                                     <thead>
                                         <tr class="bg-gray-50">
-                                            <th class="py-2 px-4 border-b text-left">变量名</th>
-                                            <th class="py-2 px-4 border-b text-left">类型</th>
+                                            <th class="py-2 px-3 sm:px-4 border-b text-left">变量名</th>
+                                            <th class="py-2 px-3 sm:px-4 border-b text-left">类型</th>
                                         </tr>
                                     </thead>
                                     <tbody id="variable-config">
@@ -115,18 +137,18 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <input type="text" id="variable-search" placeholder="搜索变量名" class="py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div class="w-full sm:w-auto">
+                                <input type="text" id="variable-search" placeholder="搜索变量名" class="py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-full sm:w-64">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 插值方法与参数 -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-neutral-dark mb-4">3. 插值方法与参数</h2>
-                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                <div class="mb-6 sm:mb-8">
+                    <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">3. 插值方法与参数</h2>
+                    <div class="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
                         <div class="mb-4">
                             <label class="block text-secondary mb-2">选择插值方法</label>
                             <select id="interpolation-method" class="w-full py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
@@ -142,7 +164,7 @@
                             <h3 class="text-lg font-semibold mb-2">方法参数</h3>
                             <div id="polynomial-params" class="mb-4">
                                 <label class="block text-secondary mb-2">多项式次数</label>
-                                <input type="number" id="polynomial-degree" value="3" min="1" max="10" class="py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                <input type="number" id="polynomial-degree" value="3" min="1" max="10" class="py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-full sm:w-40">
                             </div>
                             <div id="spline-params" class="mb-4">
                                 <label class="block text-secondary mb-2">样条边界条件</label>
@@ -156,12 +178,12 @@
                 </div>
 
                 <!-- 插值点输入与计算 -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-neutral-dark mb-4">4. 插值点输入与计算</h2>
-                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                <div class="mb-6 sm:mb-8">
+                    <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4">4. 插值点输入与计算</h2>
+                    <div class="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
                         <div class="mb-4">
                             <label class="block text-secondary mb-2">插值点输入方式</label>
-                            <div class="flex space-x-4 mb-4">
+                            <div class="flex flex-wrap gap-3 sm:space-x-4 mb-4">
                                 <label class="flex items-center">
                                     <input type="radio" name="interpolation-points-type" value="manual" checked class="mr-2">
                                     <span>手动输入</span>
@@ -191,7 +213,7 @@
 
                         <!-- 自动生成 -->
                         <div id="auto-input" class="mb-4 hidden">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                                 <div>
                                     <label class="block text-secondary mb-2">起始值</label>
                                     <input type="number" id="start-value" class="w-full py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
@@ -207,14 +229,14 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 flex flex-wrap gap-4">
+                        <div class="mt-4 flex flex-wrap gap-3 sm:gap-4">
                             <button id="calculate-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                                 <i class="fa fa-calculator mr-2"></i> 开始计算
                             </button>
                             <button id="reset-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                                 <i class="fa fa-refresh mr-2"></i> 重置
                             </button>
-                            <div class="flex items-center">
+                            <div class="flex items-center w-full sm:w-auto">
                                 <label class="block text-secondary mr-2">小数位数:</label>
                                 <select id="decimal-places" class="py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                                     <option value="2">2位</option>
@@ -284,7 +306,7 @@
         <div id="history-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="history-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -314,7 +336,7 @@
         <div id="dev-tools-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -353,7 +375,7 @@
         <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -373,9 +395,28 @@
         </div>
     </div>
     
-    <div class="container mx-auto px-4 py-2 max-w-6xl">
-        <div class="text-center text-gray-500 text-sm">插值计算器 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
-    </div>
+    <!-- 底部信息区 -->
+    <footer class="text-center py-8 border-t border-neutral-light animate-fade-in-up">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <div class="flex items-center space-x-2 text-primary font-medium">
+                <i class="fa fa-wrench text-xl"></i>
+                <span class="text-lg font-display">游一八工具箱</span>
+            </div>
+            <p class="text-neutral-gray text-sm">遇到问题不要慌，打开一八工具箱</p>
+            <div class="flex space-x-4 mt-2">
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-github text-lg"></i>
+                </a>
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-twitter text-lg"></i>
+                </a>
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-envelope text-lg"></i>
+                </a>
+            </div>
+            <p class="text-neutral-gray text-xs mt-4">© 2026 游一八工具箱 作者:游一八 power by Trae</p>
+        </div>
+    </footer>
 
     <!-- 通用脚本（必须） -->
     <script src="../../assets/js/common.js"></script>

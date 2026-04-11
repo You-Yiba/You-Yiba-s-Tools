@@ -464,16 +464,21 @@ function getInterpolationPoints() {
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                         
                         // 提取第一列
+                        const filePoints = [];
                         jsonData.forEach(row => {
                             if (row.length > 0) {
                                 const value = parseFloat(row[0]);
                                 if (!isNaN(value)) {
-                                    points.push(value);
+                                    filePoints.push(value);
                                 }
                             }
                         });
                         
-                        interpolationPoints = points;
+                        // 更新全局变量
+                        interpolationPoints = filePoints;
+                        
+                        // 自动执行计算
+                        calculateInterpolation();
                     } catch (error) {
                         console.error('读取插值点文件时出错:', error);
                         showToast('读取插值点文件时出错', 'error');
@@ -481,6 +486,9 @@ function getInterpolationPoints() {
                 };
                 
                 reader.readAsArrayBuffer(file);
+                
+                // 暂时返回空数组，等待文件读取完成后自动计算
+                return [];
             }
         }
     } else if (inputType === 'auto') {

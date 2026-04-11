@@ -3,25 +3,47 @@
 // 页面加载完成后执行的通用函数
 function initCommon() {
     // 添加滚动效果
-    const toolCards = document.querySelectorAll('.tool-card');
+    const animateElements = document.querySelectorAll('.animate-fade-in-up');
     
-    // 简单的滚动动画效果
+    // 流畅的滚动动画效果
     function checkScroll() {
-        toolCards.forEach(card => {
-            const cardTop = card.getBoundingClientRect().top;
+        animateElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
             const windowHeight = window.innerHeight;
             
-            if (cardTop < windowHeight - 100) {
-                card.classList.add('fade-in');
+            if (elementTop < windowHeight - 50) {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
             }
         });
     }
+    
+    // 初始设置
+    animateElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+    });
     
     // 初始检查
     checkScroll();
     
     // 滚动时检查
     window.addEventListener('scroll', checkScroll);
+    
+    // 平滑滚动效果
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 }
 
 // 初始化函数
@@ -270,4 +292,13 @@ function renderChangelog(changelogData, containerId) {
 
 
 // 当DOM加载完成后执行初始化
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', function() {
+    initApp();
+    loadTheme();
+    
+    // 主题切换按钮事件
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+});

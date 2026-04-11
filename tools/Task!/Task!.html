@@ -14,18 +14,29 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3b82f6',
-                        secondary: '#64748b',
-                        accent: '#f43f5e',
-                        neutral: '#f1f5f9',
-                        'neutral-dark': '#334155'
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                        success: '#4cc9f0',
+                        warning: '#f72585',
+                        error: '#f8961e',
+                        neutral: '#f8f9fa',
+                        'neutral-dark': '#212529',
+                        'neutral-gray': '#6c757d',
+                        'neutral-light': '#e9ecef'
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif']
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
                     },
                     boxShadow: {
                         'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.15)'
+                    },
+                    backdropBlur: {
+                        'glass': '4px'
                     }
                 }
             }
@@ -33,30 +44,41 @@
     </script>
     <link rel="stylesheet" href="../../assets/css/common.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+<body class="bg-gradient-to-br from-primary/5 to-secondary/5 min-h-screen font-sans text-neutral-dark">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 顶部导航栏 -->
+        <nav class="mb-8 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center space-x-2 text-primary hover:text-secondary transition-colors">
+                <i class="fa fa-arrow-left text-xl"></i>
+                <span class="font-bold font-display hidden sm:inline">返回主页</span>
+            </a>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-primary">Task!</h1>
+            <div class="w-16"></div> <!-- 占位，保持标题居中 -->
+        </nav>
+        
         <!-- 顶部信息区 -->
         <header class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-primary mb-2">Task!</h1>
-            <div id="current-date" class="text-xl text-secondary"></div>
+            <div id="current-date" class="text-xl text-neutral-gray"></div>
         </header>
 
         <!-- 功能按钮区域 -->
         <div class="text-center mb-6 flex justify-center space-x-4">
-            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            <button id="history-btn" class="bg-accent hover:bg-primary text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-history mr-2"></i> 历史记录
             </button>
-            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+            <button id="dev-tools-btn" class="bg-secondary hover:bg-primary text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
                 <i class="fa fa-code mr-2"></i> 开发者选项
             </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <!-- 日历展示区 -->
-            <div class="lg:col-span-2 glass-effect rounded-xl shadow-card p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-neutral-dark">
+            <div class="lg:col-span-2 backdrop-blur-glass bg-white/70 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-4 sm:p-6 animate-fade-in-up">
+                <div class="flex justify-between items-center mb-4 sm:mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark">
                         <span id="current-month"></span>
                     </h2>
                     <div class="flex space-x-2">
@@ -115,11 +137,11 @@
             </div>
 
             <!-- 待办清单操作区 -->
-            <div class="lg:col-span-3 glass-effect rounded-xl shadow-card p-6">
-                <h2 class="text-2xl font-bold text-neutral-dark mb-6">待办事项</h2>
+            <div class="lg:col-span-3 backdrop-blur-glass bg-white/70 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 p-4 sm:p-6 animate-fade-in-up animation-delay-200">
+                <h2 class="text-xl sm:text-2xl font-bold text-neutral-dark mb-4 sm:mb-6">待办事项</h2>
                 
                 <!-- 添加待办表单 -->
-                <form id="add-todo-form" class="mb-6">
+                <form id="add-todo-form" class="mb-4 sm:mb-6">
                     <div class="mb-4">
                         <label for="todo-input" class="block text-sm font-medium text-secondary mb-1">待办内容</label>
                         <input 
@@ -139,7 +161,7 @@
                     </div>
                     <div class="mb-4" id="time-precision-container">
                         <label class="block text-sm font-medium text-secondary mb-1">时间精度</label>
-                        <div class="flex space-x-4">
+                        <div class="flex space-x-2 sm:space-x-4">
                             <label class="flex items-center space-x-2 cursor-pointer">
                                 <input type="radio" name="time-precision" value="day" checked class="text-primary focus:ring-primary">
                                 <span>精确至天</span>
@@ -152,7 +174,7 @@
                     </div>
                     <div class="mb-4" id="time-select-container" style="display: none;">
                         <label class="block text-sm font-medium text-secondary mb-1">时间</label>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-2 sm:gap-4">
                             <div>
                                 <label for="todo-hour" class="block text-xs text-secondary mb-1">小时</label>
                                 <input 
@@ -190,7 +212,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-secondary mb-1">标签</label>
-                        <div class="flex space-x-4">
+                        <div class="flex flex-wrap gap-2 sm:space-x-4">
                             <label class="flex items-center space-x-2 cursor-pointer">
                                 <input type="radio" name="todo-tag" value="学习" checked class="text-primary focus:ring-primary">
                                 <span>学习</span>
@@ -216,10 +238,10 @@
                 <!-- 待办事项列表 -->
                 <div>
                     <h3 class="text-lg font-semibold text-neutral-dark mb-3">待办列表</h3>
-                    <div id="todo-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                    <div id="todo-list" class="space-y-3 max-h-[400px] sm:max-h-[500px] overflow-y-auto pr-2">
                         <!-- 待办事项将通过JavaScript动态生成 -->
-                        <div class="text-center text-secondary py-8" id="empty-todo-message">
-                            <i class="fa fa-clipboard-list text-4xl mb-3 opacity-50"></i>
+                        <div class="text-center text-secondary py-6 sm:py-8" id="empty-todo-message">
+                            <i class="fa fa-clipboard-list text-3xl sm:text-4xl mb-3 opacity-50"></i>
                             <p>暂无待办事项</p>
                         </div>
                     </div>
@@ -234,7 +256,7 @@
         <div id="history-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="history-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="history-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -297,7 +319,7 @@
         <div id="dev-tools-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="dev-tools-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -463,7 +485,7 @@
         <div id="history-detail-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="history-detail-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg glass-effect rounded-xl shadow-lg">
+        <div id="history-detail-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg backdrop-blur-glass bg-white/80 rounded-xl shadow-lg">
             <!-- 弹窗头部 -->
             <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-xl font-bold text-neutral-dark">历史记录详情</h3>
@@ -487,7 +509,7 @@
         <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
         
         <!-- 弹窗容器 -->
-        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] backdrop-blur-glass bg-white/80 rounded-xl shadow-lg flex flex-col">
             <!-- 弹窗头部 -->
             <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
@@ -507,9 +529,28 @@
         </div>
     </div>
     
-    <div class="container mx-auto px-4 py-2 max-w-4xl">
-        <div class="text-center text-gray-500 text-sm">Task! v1.3.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
-    </div>
+    <!-- 底部信息区 -->
+    <footer class="text-center py-8 border-t border-neutral-light animate-fade-in-up">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <div class="flex items-center space-x-2 text-primary font-medium">
+                <i class="fa fa-wrench text-xl"></i>
+                <span class="text-lg font-display">游一八工具箱</span>
+            </div>
+            <p class="text-neutral-gray text-sm">遇到问题不要慌，打开一八工具箱</p>
+            <div class="flex space-x-4 mt-2">
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-github text-lg"></i>
+                </a>
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-twitter text-lg"></i>
+                </a>
+                <a href="#" class="text-neutral-gray hover:text-primary transition-colors">
+                    <i class="fa fa-envelope text-lg"></i>
+                </a>
+            </div>
+            <p class="text-neutral-gray text-xs mt-4">© 2026 游一八工具箱 作者:游一八 power by Trae</p>
+        </div>
+    </footer>
 
     <script src="../../assets/js/common.js"></script>
     <script src="assets/js/script.js"></script>

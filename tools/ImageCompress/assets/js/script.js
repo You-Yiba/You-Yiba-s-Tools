@@ -41,9 +41,11 @@ const changelogData = [
 ];
 
 // 渲染更新日志 - 使用通用函数
-function renderChangelog() {
+function renderImageCompressChangelog() {
     // 调用通用的渲染更新日志函数
-    renderChangelog(changelogData, 'changelog-content');
+    if (typeof renderChangelog === 'function') {
+        renderChangelog(changelogData, 'changelog-content');
+    }
 }
 
 // 初始化函数
@@ -239,7 +241,7 @@ function initImageCompressApp() {
                 e.preventDefault();
                 if (changelogModal) {
                     changelogModal.classList.remove('hidden');
-                    renderChangelog();
+                    renderImageCompressChangelog();
                 }
             });
         }
