@@ -8,7 +8,7 @@
     
     /* 工具卡片 */
     .tool-card {
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
         min-height: 320px;
     }
@@ -61,7 +61,7 @@
         justify-content: center;
         border-radius: 9999px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: background-color 0.2s, color 0.2s;
     }
     .calendar-day:hover {
         background-color: rgba(59, 130, 246, 0.1);
@@ -89,7 +89,7 @@
     
     /* 待办事项 */
     .todo-item {
-        transition: all 0.3s;
+        transition: transform 0.3s, box-shadow 0.3s;
         transform: translateX(0);
     }
     .todo-item:hover {
@@ -279,7 +279,7 @@
     .file-item {
         position: relative;
         overflow: hidden;
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
     .file-item:hover {
@@ -311,5 +311,34 @@
     
     .file-remove:hover {
         background: rgba(244, 63, 94, 1);
+    }
+
+    /* 尊重用户的动画偏好设置 */
+    @media (prefers-reduced-motion: reduce) {
+        .fade-in,
+        .slide-out,
+        .modal-slide-out,
+        .loading::after {
+            animation: none;
+        }
+
+        .tool-card,
+        .calendar-day,
+        .todo-item,
+        .file-item {
+            transition: none;
+        }
+
+        .tool-card:hover {
+            transform: none;
+        }
+
+        .todo-item:hover {
+            transform: none;
+        }
+
+        .file-item:hover {
+            transform: none;
+        }
     }
 }

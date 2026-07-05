@@ -5,32 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task!</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23eff6ff'/%3E%3Cstop offset='100%25' style='stop-color:%23e0e7ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' fill='url(%23bg)'/%3E%3Ctext x='16' y='22' font-family='Inter, system-ui, sans-serif' font-size='14' font-weight='bold' text-anchor='middle' fill='%233b82f6'%3ETask!%3C/text%3E%3C/svg%3E" type="image/svg+xml">
-    <!-- Tailwind CSS v3 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3b82f6',
-                        secondary: '#64748b',
-                        accent: '#f43f5e',
-                        neutral: '#f1f5f9',
-                        'neutral-dark': '#334155'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif']
-                    },
-                    boxShadow: {
-                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS v3 (本地化) -->
+    <script src="../../assets/vendor/tailwindcss/tailwind.min.js"></script>
+    <script src="../../assets/js/tailwind-config.js"></script>
+    <!-- Font Awesome (本地化) -->
+    <link href="../../assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/common.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -38,33 +17,36 @@
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- 顶部信息区 -->
         <header class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-primary mb-2">Task!</h1>
-            <div id="current-date" class="text-xl text-secondary"></div>
+            <h1 class="text-4xl font-bold text-primary mb-2 fade-in">Task!</h1>
+            <div id="current-date" class="text-xl text-secondary fade-in"></div>
         </header>
 
         <!-- 功能按钮区域 -->
-        <div class="text-center mb-6 flex justify-center space-x-4">
+        <div class="text-center mb-6 flex justify-center space-x-4 fade-in">
+            <a href="../../index.html" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
+                <i class="fa fa-home mr-2" aria-hidden="true"></i> 回首页
+            </a>
             <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-history mr-2"></i> 历史记录
+                <i class="fa fa-history mr-2" aria-hidden="true"></i> 历史记录
             </button>
             <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-code mr-2"></i> 开发者选项
+                <i class="fa fa-code mr-2" aria-hidden="true"></i> 开发者选项
             </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <!-- 日历展示区 -->
-            <div class="lg:col-span-2 glass-effect rounded-xl shadow-card p-6">
+            <div class="lg:col-span-2 glass-effect rounded-xl shadow-card p-6 fade-in">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-neutral-dark">
                         <span id="current-month"></span>
                     </h2>
                     <div class="flex space-x-2">
-                        <button id="prev-month" class="p-2 rounded-full hover:bg-primary hover:bg-opacity-10 transition-colors">
-                            <i class="fa fa-chevron-left text-primary"></i>
+                        <button id="prev-month" class="p-2 rounded-full hover:bg-primary hover:bg-opacity-10 transition-colors" aria-label="上一个月">
+                            <i class="fa fa-chevron-left text-primary" aria-hidden="true"></i>
                         </button>
-                        <button id="next-month" class="p-2 rounded-full hover:bg-primary hover:bg-opacity-10 transition-colors">
-                            <i class="fa fa-chevron-right text-primary"></i>
+                        <button id="next-month" class="p-2 rounded-full hover:bg-primary hover:bg-opacity-10 transition-colors" aria-label="下一个月">
+                            <i class="fa fa-chevron-right text-primary" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
@@ -115,7 +97,7 @@
             </div>
 
             <!-- 待办清单操作区 -->
-            <div class="lg:col-span-3 glass-effect rounded-xl shadow-card p-6">
+            <div class="lg:col-span-3 glass-effect rounded-xl shadow-card p-6 fade-in">
                 <h2 class="text-2xl font-bold text-neutral-dark mb-6">待办事项</h2>
                 
                 <!-- 添加待办表单 -->
@@ -209,7 +191,7 @@
                         type="submit" 
                         class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
                     >
-                        <i class="fa fa-plus mr-2"></i> 添加待办
+                        <i class="fa fa-plus mr-2" aria-hidden="true"></i> 添加待办
                     </button>
                 </form>
                 
@@ -219,7 +201,7 @@
                     <div id="todo-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                         <!-- 待办事项将通过JavaScript动态生成 -->
                         <div class="text-center text-secondary py-8" id="empty-todo-message">
-                            <i class="fa fa-clipboard-list text-4xl mb-3 opacity-50"></i>
+                            <i class="fa fa-clipboard-list text-4xl mb-3 opacity-50" aria-hidden="true"></i>
                             <p>暂无待办事项</p>
                         </div>
                     </div>
@@ -238,10 +220,10 @@
             <!-- 弹窗头部 -->
             <div id="history-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
-                    <i class="fa fa-history mr-2 text-secondary"></i> 历史记录
+                    <i class="fa fa-history mr-2 text-secondary" aria-hidden="true"></i> 历史记录
                 </h2>
-                <button id="history-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <i class="fa fa-times text-secondary"></i>
+                <button id="history-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
+                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
                 </button>
             </div>
             
@@ -272,7 +254,7 @@
                     <!-- 清空按钮 -->
                     <div class="ml-auto self-end">
                         <button id="clear-history" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
-                            <i class="fa fa-trash mr-2"></i> 清空历史记录
+                            <i class="fa fa-trash mr-2" aria-hidden="true"></i> 清空历史记录
                         </button>
                     </div>
                 </div>
@@ -283,7 +265,7 @@
                 <div id="history-list" class="space-y-3">
                     <!-- 历史记录将通过JavaScript动态生成 -->
                     <div class="text-center text-secondary py-8" id="empty-history-message">
-                        <i class="fa fa-clock-o text-4xl mb-3 opacity-50"></i>
+                        <i class="fa fa-clock-o text-4xl mb-3 opacity-50" aria-hidden="true"></i>
                         <p>暂无历史记录</p>
                     </div>
                 </div>
@@ -301,10 +283,10 @@
             <!-- 弹窗头部 -->
             <div id="dev-tools-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
-                    <i class="fa fa-code mr-2 text-gray-700"></i> 开发者工具
+                    <i class="fa fa-code mr-2 text-gray-700" aria-hidden="true"></i> 开发者工具
                 </h2>
-                <button id="dev-tools-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <i class="fa fa-times text-secondary"></i>
+                <button id="dev-tools-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
+                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
                 </button>
             </div>
             
@@ -405,7 +387,7 @@
                             type="submit" 
                             class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
                         >
-                            <i class="fa fa-plus mr-2"></i> 添加待办
+                            <i class="fa fa-plus mr-2" aria-hidden="true"></i> 添加待办
                         </button>
                     </form>
                 </div>
@@ -416,13 +398,13 @@
                         <h4 class="font-medium mb-2">数据管理</h4>
                         <div class="flex flex-wrap gap-2">
                             <button id="clear-all-data" class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
-                                <i class="fa fa-database mr-2"></i> 清空所有数据
+                                <i class="fa fa-database mr-2" aria-hidden="true"></i> 清空所有数据
                             </button>
                             <button id="export-data" class="bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
-                                <i class="fa fa-download mr-2"></i> 导出数据
+                                <i class="fa fa-download mr-2" aria-hidden="true"></i> 导出数据
                             </button>
                             <button id="import-data" class="bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
-                                <i class="fa fa-upload mr-2"></i> 导入数据
+                                <i class="fa fa-upload mr-2" aria-hidden="true"></i> 导入数据
                             </button>
                             <input type="file" id="import-data-file" accept=".json" class="hidden">
                         </div>
@@ -431,7 +413,7 @@
                     <div>
                         <h4 class="font-medium mb-2">快速添加测试数据</h4>
                         <button id="add-test-data" class="bg-purple-600 hover:bg-purple-500 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
-                            <i class="fa fa-magic mr-2"></i> 添加测试数据
+                            <i class="fa fa-magic mr-2" aria-hidden="true"></i> 添加测试数据
                         </button>
                     </div>
                     
@@ -467,8 +449,8 @@
             <!-- 弹窗头部 -->
             <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-xl font-bold text-neutral-dark">历史记录详情</h3>
-                <button id="history-detail-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <i class="fa fa-times text-secondary"></i>
+                <button id="history-detail-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
+                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
                 </button>
             </div>
             
@@ -491,10 +473,10 @@
             <!-- 弹窗头部 -->
             <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
-                    <i class="fa fa-list-alt mr-2 text-secondary"></i> 更新日志
+                    <i class="fa fa-list-alt mr-2 text-secondary" aria-hidden="true"></i> 更新日志
                 </h2>
-                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <i class="fa fa-times text-secondary"></i>
+                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
+                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
                 </button>
             </div>
             
@@ -508,10 +490,11 @@
     </div>
     
     <div class="container mx-auto px-4 py-2 max-w-4xl">
-        <div class="text-center text-gray-500 text-sm">Task! v1.3.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
+        <div class="text-center text-gray-500 text-sm fade-in">Task! v1.3.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
     </div>
 
     <script src="../../assets/js/common.js"></script>
+    <script src="../../assets/js/components.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>

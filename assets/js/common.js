@@ -242,30 +242,7 @@ function closeModal(modalId) {
     }
 }
 
-// 渲染更新日志
-function renderChangelog(changelogData, containerId) {
-    const changelogContent = document.getElementById(containerId);
-    if (!changelogContent) return;
-    
-    changelogContent.innerHTML = '';
-    
-    changelogData.forEach(item => {
-        const versionEl = document.createElement('div');
-        versionEl.className = 'bg-white p-4 rounded-lg shadow-sm';
-        
-        versionEl.innerHTML = `
-            <div class="flex justify-between items-center mb-3">
-                <h4 class="font-bold text-lg text-neutral-dark">版本 ${item.version}</h4>
-                <span class="text-sm text-secondary">${item.date}</span>
-            </div>
-            <ul class="space-y-2 text-gray-700">
-                ${item.changes.map(change => `<li class="flex items-start"><i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i><span>${change}</span></li>`).join('')}
-            </ul>
-        `;
-        
-        changelogContent.appendChild(versionEl);
-    });
-}
+// renderChangelog 已移至 components.js
 
 
 

@@ -469,14 +469,14 @@ document.addEventListener('DOMContentLoaded', function() {
         todoHTML += `
             </div>
             <div class="flex space-x-1">
-                <button class="complete-todo p-2 rounded-full hover:bg-green-100 text-green-500 transition-colors" data-index="${index}">
-                    <i class="fa fa-check"></i>
+                <button class="complete-todo p-2 rounded-full hover:bg-green-100 text-green-500 transition-colors" data-index="${index}" aria-label="完成">
+                    <i class="fa fa-check" aria-hidden="true"></i>
                 </button>
-                <button class="edit-todo p-2 rounded-full hover:bg-blue-100 text-primary transition-colors" data-index="${index}">
-                    <i class="fa fa-pencil"></i>
+                <button class="edit-todo p-2 rounded-full hover:bg-blue-100 text-primary transition-colors" data-index="${index}" aria-label="编辑">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
                 </button>
-                <button class="delete-todo p-2 rounded-full hover:bg-red-100 text-accent transition-colors" data-index="${index}">
-                    <i class="fa fa-trash"></i>
+                <button class="delete-todo p-2 rounded-full hover:bg-red-100 text-accent transition-colors" data-index="${index}" aria-label="删除">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
                 </button>
             </div>
         `;

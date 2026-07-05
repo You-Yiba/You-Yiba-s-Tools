@@ -1,0 +1,48 @@
+# ========== IDE / 编辑器 ==========
+.trae/
+.vscode/
+.idea/
+.superpowers/
+*.swp
+*.swo
+
+# ========== AI 工具配置 ==========
+CLAUDE.md
+.cursorrules
+
+# ========== 操作系统 ==========
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+# macOS
+.DS_Store
+# Linux
+*~
+
+# ========== Node.js ==========
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ========== 日志 / 临时文件 ==========
+*.log
+tmp/
+temp/
+
+# ========== 环境变量 / 密钥 ==========
+.env
+.env.local
+.env.*.local
+
+# ========== 构建产物 ==========
+dist/
+build/
+*.min.css
+*.min.js
+# 例外：vendor 目录下的压缩文件需要追踪
+!assets/vendor/**/*.min.css
+!assets/vendor/**/*.min.js

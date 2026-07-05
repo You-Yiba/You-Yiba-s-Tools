@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyQuiz Tests</title>
+    <style>
+        body { font-family: system-ui, sans-serif; padding: 20px; background: #f8fafc; }
+        .test-pass { color: #16a34a; }
+        .test-fail { color: #dc2626; }
+        .suite { margin-bottom: 20px; padding: 12px; background: white; border-radius: 8px; }
+        .summary { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; padding: 12px; border-radius: 8px; }
+        .summary.pass { background: #dcfce7; color: #166534; }
+        .summary.fail { background: #fee2e2; color: #991b1b; }
+        .error { color: #dc2626; margin-left: 20px; white-space: pre-wrap; }
+        .test-item { margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <h1>MyQuiz 测试套件</h1>
+    <div id="results"></div>
+    <script>
+        // 极简测试框架
+        const tests = [];
+        let currentSuite = '';
+
+        function describe(name, fn) {
+            currentSuite = name;
+            fn();
+        }
+
+        function test(name, fn) {
+            tests.push({ suite: currentSuite, name, fn });
+        }
+
+        function assertEqual(actual, expected, msg) {
+            const actualStr = JSON.stringify(actual);
+            const expectedStr = JSON.stringify(expected);
+            if (actualStr !== expectedStr) {
+                throw new Error((msg || 'Assertion failed') + `\n  Expected: ${expectedStr}\n  Actual:   ${actualStr}`);
+            }
+        }
+
+        function assertTrue(value, msg) {
+            if (!value) {
+                throw new Error(msg || 'Expected true but got false');
+            }
+        }
+
+        function assertFalse(value, msg) {
+            if (value) {
+                throw new Error(msg || 'Expected false but got true');
+            }
+        }
+
+        function runTests() {
+            const results = document.getElementById('results');
+            let passed = 0, failed = 0;
+            const suites = {};
+
+            for (const t of tests) {
+                if (!suites[t.suite]) suites[t.suite] = [];
+                try {
+                    t.fn();
+                    suites[t.suite].push({ name: t.name, pass: true });
+                    passed++;
+                } catch (e) {
+                    suites[t.suite].push({ name: t.name, pass: false, error: e.message });
+                    failed++;
+                }
+            }
+
+            const total = passed + failed;
+            const summary = document.createElement('div');
+            summary.className = `summary ${failed === 0 ? 'pass' : 'fail'}`;
+            summary.textContent = `${passed}/${total} 通过, ${failed} 失败`;
+            results.appendChild(summary);
+
+            for (const [suiteName, suiteTests] of Object.entries(suites)) {
+                const suiteDiv = document.createElement('div');
+                suiteDiv.className = 'suite';
+                suiteDiv.innerHTML = `<h3>${suiteName}</h3>`;
+                for (const t of suiteTests) {
+                    const item = document.createElement('div');
+                    item.className = 'test-item';
+                    item.innerHTML = `<span class="${t.pass ? 'test-pass' : 'test-fail'}">${t.pass ? '✓' : '✗'} ${t.name}</span>`;
+                    if (!t.pass) {
+                        const err = document.createElement('div');
+                        err.className = 'error';
+                        err.textContent = t.error;
+                        item.appendChild(err);
+                    }
+                    suiteDiv.appendChild(item);
+                }
+                results.appendChild(suiteDiv);
+            }
+        }
+    </script>
+    <script src="../assets/js/script.js"></script>
+    <script src="csv-parser.test.js"></script>
+    <script src="question-manager.test.js"></script>
+    <script src="quiz-engine.test.js"></script>
+    <script>
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

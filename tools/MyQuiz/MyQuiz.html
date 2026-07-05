@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyQuiz 刷题助手</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23eff6ff'/%3E%3Cstop offset='100%25' style='stop-color:%23e0e7ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' fill='url(%23bg)'/%3E%3Ctext x='16' y='23' font-family='Inter, system-ui, sans-serif' font-size='18' font-weight='bold' text-anchor='middle' fill='%233b82f6'%3EQ%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Tailwind CSS v3 (本地化) -->
+    <script src="../../assets/vendor/tailwindcss/tailwind.min.js"></script>
+    <script src="../../assets/js/tailwind-config.js"></script>
+    <!-- Font Awesome (本地化) -->
+    <link href="../../assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans text-neutral-dark">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- 顶部信息区 -->
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-primary mb-2 fade-in">MyQuiz 刷题助手</h1>
+            <p class="text-xl text-secondary max-w-2xl mx-auto fade-in">
+                导入题库，卡片式刷题，错题本智能复习
+            </p>
+        </header>
+
+        <!-- 工具栏占位 -->
+        <div id="toolbar-container"></div>
+
+        <!-- 主要内容区 - 三栏布局 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 quiz-layout-wrapper">
+            <!-- 左栏：题库管理 -->
+            <div class="lg:col-span-3 glass-effect rounded-2xl shadow-card p-6 fade-in quiz-left-panel overflow-y-auto">
+                <h2 class="text-xl font-bold text-neutral-dark mb-4 flex items-center">
+                    <i class="fa fa-database mr-2 text-primary" aria-hidden="true"></i>
+                    题库管理
+                </h2>
+
+                <!-- 导入区域（预留） -->
+                <div id="import-section" class="mb-6">
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+                        <i class="fa fa-cloud-upload text-3xl text-gray-400 mb-2" aria-hidden="true"></i>
+                        <p class="text-sm text-secondary">导入题库功能</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 my-4"></div>
+
+                <!-- 刷题设置区域（预留） -->
+                <div id="quiz-settings" class="space-y-4">
+                    <h3 class="font-semibold text-neutral-dark flex items-center">
+                        <i class="fa fa-cog mr-2 text-secondary" aria-hidden="true"></i>
+                        刷题设置
+                    </h3>
+                    <div class="bg-white rounded-xl p-4 shadow-sm">
+                        <p class="text-sm text-secondary">刷题设置功能</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中栏 + 右栏 容器 -->
+            <div id="main-content" class="lg:col-span-9 grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+                <!-- 中栏：答题卡片 -->
+                <div id="quiz-panel" class="lg:col-span-8 glass-effect rounded-2xl shadow-card p-6 fade-in h-full overflow-hidden">
+                    <div id="quiz-container" class="h-full flex flex-col overflow-y-auto quiz-center-scroll pr-2">
+                        <!-- 空状态 -->
+                        <div id="quiz-empty-state" class="flex-1 flex flex-col items-center justify-center text-center py-12">
+                            <i class="fa fa-graduation-cap text-6xl text-gray-300 mb-4" aria-hidden="true"></i>
+                            <p class="text-lg text-secondary">导入题库后开始刷题吧~</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右栏：题库浏览/错题 -->
+                <div id="side-panel" class="lg:col-span-4 glass-effect rounded-2xl shadow-card p-6 fade-in h-full flex flex-col quiz-right-panel overflow-y-auto">
+                    <!-- 顶部按钮区 -->
+                    <div id="browser-btn-container" class="mb-4">
+                        <button id="bank-browser-btn" class="w-full bg-primary/10 hover:bg-primary/20 text-primary font-medium py-2 px-4 rounded-xl transition-colors text-sm flex items-center justify-center">
+                            <i class="fa fa-th-list mr-2"></i>题库浏览
+                        </button>
+                    </div>
+
+                    <!-- Tab 切换 -->
+                    <div class="flex border-b border-gray-200 mb-4">
+                        <button class="tab-btn active flex-1 py-3 px-4 text-sm font-medium text-center transition-colors" data-tab="bank">
+                            题库
+                        </button>
+                        <button class="tab-btn flex-1 py-3 px-4 text-sm font-medium text-center transition-colors" data-tab="wrong">
+                            <i class="fa fa-star mr-1" aria-hidden="true"></i>错题
+                        </button>
+                    </div>
+
+                    <!-- 题库列表 -->
+                    <div id="bank-list" class="tab-content space-y-3 flex-1 overflow-y-auto pr-2 min-h-0">
+                        <div class="text-center text-secondary py-8">
+                            <i class="fa fa-file-text-o text-3xl mb-2 opacity-50" aria-hidden="true"></i>
+                            <p class="text-sm">暂无题目</p>
+                        </div>
+                    </div>
+
+                    <!-- 错题列表 -->
+                    <div id="wrong-list" class="tab-content space-y-3 flex-1 overflow-y-auto pr-2 min-h-0 hidden">
+                        <div class="text-center text-secondary py-8">
+                            <i class="fa fa-star-o text-3xl mb-2 opacity-50" aria-hidden="true"></i>
+                            <p class="text-sm">暂无错题</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗容器占位 -->
+    <div id="modals-container"></div>
+
+    <!-- 页脚占位 -->
+    <div id="footer-container"></div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        var changelogData = [
+            {
+                version: '1.0.0',
+                date: '2026-07-05',
+                changes: [
+                    '初始版本发布',
+                    '支持 CSV 格式题库导入',
+                    '支持选择题和填空题两种题型',
+                    '卡片式答题界面，支持随机出题',
+                    '错题本智能复习功能'
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initComponents({
+                toolName: 'MyQuiz 刷题助手',
+                version: '1.0.0',
+                changelogData: changelogData
+            });
+        });
+    </script>
+</body>
+</html>
