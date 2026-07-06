@@ -143,7 +143,7 @@ function createFooter(config) {
     footer.className = 'container mx-auto px-4 py-2 max-w-6xl fade-in';
     footer.innerHTML = `
         <div class="text-center text-gray-500 text-sm">
-            ${name} v${version} 作者:游一八 powered by Trae
+            ${name} v${version} 作者:游一八 power by Trae
             <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a>
         </div>
     `;
@@ -168,21 +168,21 @@ function createToolbar(config) {
     if (showHome) {
         buttons += `
             <a href="${homeUrl}" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-home mr-2" aria-hidden="true"></i> 回首页
+                <i class="fa fa-home mr-2" aria-hidden="true"></i><span class="hidden sm:inline">回首页</span>
             </a>
         `;
     }
     if (showHistory) {
         buttons += `
             <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-history mr-2" aria-hidden="true"></i> 历史记录
+                <i class="fa fa-history mr-2" aria-hidden="true"></i><span class="hidden sm:inline">历史记录</span>
             </button>
         `;
     }
     if (showDevTools) {
         buttons += `
             <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-code mr-2" aria-hidden="true"></i> 开发者选项
+                <i class="fa fa-code mr-2" aria-hidden="true"></i><span class="hidden sm:inline">开发者选项</span>
             </button>
         `;
     }

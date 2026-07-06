@@ -865,6 +865,10 @@ var UI = {
 
         this._saveSettingsFromUI();
         this.startQuiz(mode, count, shuffle);
+
+        if (window.innerWidth < 1024 && typeof switchMobileTab === 'function') {
+            switchMobileTab('quiz');
+        }
     },
 
     refreshSettingsStats: function() {
