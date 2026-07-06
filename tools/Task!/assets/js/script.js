@@ -53,15 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const importDataFile = document.getElementById('import-data-file');
     const addTestDataBtn = document.getElementById('add-test-data');
     
-    // 更新日志相关元素
-    const changelogBtn = document.getElementById('changelog-btn');
-    const changelogModal = document.getElementById('changelog-modal');
-    const changelogOverlay = document.getElementById('changelog-overlay');
-    const changelogContainer = document.getElementById('changelog-container');
-    const changelogHeader = document.getElementById('changelog-header');
-    const changelogClose = document.getElementById('changelog-close');
-    const changelogContent = document.getElementById('changelog-content');
-
     // 当前日期和日历状态
     let currentDate = new Date();
     let currentMonth = new Date();
@@ -1199,17 +1190,7 @@ document.addEventListener('DOMContentLoaded', function() {
             addTestData();
         });
         
-        // 更新日志按钮点击事件
-        changelogBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openChangelogModal();
-        });
         
-        // 关闭更新日志弹窗
-        changelogClose.addEventListener('click', closeChangelogModal);
-        changelogOverlay.addEventListener('click', closeChangelogModal);
-        
-
     }
     
     function openDevToolsModal() {
@@ -1233,84 +1214,6 @@ document.addEventListener('DOMContentLoaded', function() {
             devToolsModal.classList.add('hidden');
             devToolsContainer.classList.remove('slide-out');
         }, 300);
-    }
-    
-    // 更新日志相关函数
-    function openChangelogModal() {
-        changelogModal.classList.remove('hidden');
-        renderChangelog();
-        
-        // 添加动画效果
-        setTimeout(() => {
-            changelogContainer.classList.add('fade-in');
-        }, 10);
-    }
-    
-    function closeChangelogModal() {
-        changelogContainer.classList.add('slide-out');
-        
-        setTimeout(() => {
-            changelogModal.classList.add('hidden');
-            changelogContainer.classList.remove('fade-in', 'slide-out');
-        }, 300);
-    }
-    
-    function renderChangelog() {
-        const changelogData = [
-            {
-                version: '1.3.0beta',
-                date: '2026-02-14',
-                changes: [
-                    '添加标签功能，支持从"学习"、"科研"、"其他"三个标签中选择',
-                    '为开发者工具中的添加过期待办事项功能添加时间精度选项',
-                    '为开发者工具中的添加过期待办事项功能添加标签选择',
-                    '更新测试数据生成功能，包含标签信息',
-                    '优化界面布局，调整标签显示位置'
-                ]
-            },
-            {
-                version: '1.1.0beta',
-                date: '2026-02-14',
-                changes: [
-                    '添加时间精度选择功能，支持精确至天和精确至小时',
-                    '优化待办事项列表中剩余时间的显示方式',
-                    '在日历界面添加当月任务统计模块',
-                    '移除历史记录和开发者选项的拖动功能，添加滚动条',
-                    '添加更新日志功能'
-                ]
-            },
-            {
-                version: '1.0.0beta',
-                date: '2026-02-13',
-                changes: [
-                    '初始版本发布',
-                    '实现待办事项的添加、编辑、删除功能',
-                    '支持任务完成状态管理',
-                    '添加日历视图',
-                    '添加历史记录功能',
-                    '添加开发者工具'
-                ]
-            }
-        ];
-        
-        changelogContent.innerHTML = '';
-        
-        changelogData.forEach(item => {
-            const versionEl = document.createElement('div');
-            versionEl.className = 'bg-white p-4 rounded-lg shadow-sm';
-            
-            versionEl.innerHTML = `
-                <div class="flex justify-between items-center mb-3">
-                    <h4 class="font-bold text-lg text-neutral-dark">版本 ${item.version}</h4>
-                    <span class="text-sm text-secondary">${item.date}</span>
-                </div>
-                <ul class="space-y-2 text-gray-700">
-                    ${item.changes.map(change => `<li class="flex items-start"><i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i><span>${change}</span></li>`).join('')}
-                </ul>
-            `;
-            
-            changelogContent.appendChild(versionEl);
-        });
     }
     
     function devAddTodo() {

@@ -337,8 +337,9 @@ describe('Task 3.5: 手动标星/取消标星', function() {
         QuestionManager.toggleStar(id, false);
         assertFalse(QuestionManager.isWrong(id), '取消标星后 isWrong 应为 false');
         var q = QuestionManager.getById(id);
-        assertEqual(q.wrongCount, 0);
-        assertEqual(q.correctStreak, 0);
+        assertTrue(q.wrongCount >= 1, '取消标星后 wrongCount 保留历史数据');
+        var threshold = Storage.getSettings().masterThreshold;
+        assertTrue(q.correctStreak >= threshold, '取消标星后 correctStreak 应达到阈值');
         restoreLocalStorage();
     });
 });

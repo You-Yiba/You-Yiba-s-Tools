@@ -343,51 +343,36 @@
         </div>
     </div>
     
-    <!-- 更新日志弹窗 -->
-    <div id="changelog-modal" class="fixed inset-0 z-50 hidden">
-        <!-- 遮罩层 -->
-        <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
-        
-        <!-- 弹窗容器 -->
-        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
-            <!-- 弹窗头部 -->
-            <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
-                    <i class="fa fa-list-alt mr-2 text-secondary" aria-hidden="true"></i> 更新日志
-                </h2>
-                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
-                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
-                </button>
-            </div>
-            
-            <!-- 更新日志内容 -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <div id="changelog-content" class="space-y-6">
-                    <!-- 更新日志内容 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm">
-                        <h3 class="text-lg font-semibold mb-2">v1.0.0 (2026-02-21)</h3>
-                        <ul class="list-disc list-inside space-y-2 text-secondary">
-                            <li>初始版本发布</li>
-                            <li>支持图片上传（拖拽、点击选择）</li>
-                            <li>支持图片压缩（质量调节、尺寸调整）</li>
-                            <li>支持预览对比功能</li>
-                            <li>支持单张和批量下载</li>
-                            <li>支持历史记录功能</li>
-                            <li>添加开发者选项</li>
-                            <li>添加更新日志功能</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container mx-auto px-4 py-2 max-w-6xl">
-        <div class="text-center text-gray-500 text-sm fade-in">图片压缩工具 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
-    </div>
+    <div id="footer-container"></div>
 
     <script src="../../assets/js/common.js"></script>
     <script src="../../assets/js/components.js"></script>
     <script src="assets/js/script.js"></script>
+    <script>
+        const changelogData = [
+            {
+                version: '1.0.0',
+                date: '2026-02-21',
+                changes: [
+                    '初始版本发布',
+                    '支持图片上传（拖拽、点击选择）',
+                    '支持图片压缩（质量调节、尺寸调整）',
+                    '支持预览对比功能',
+                    '支持单张和批量下载',
+                    '支持历史记录功能',
+                    '添加开发者选项',
+                    '添加更新日志功能'
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initComponents({
+                toolName: '图片压缩工具',
+                version: '1.0.0beta',
+                changelogData: changelogData
+            });
+        });
+    </script>
 </body>
 </html>

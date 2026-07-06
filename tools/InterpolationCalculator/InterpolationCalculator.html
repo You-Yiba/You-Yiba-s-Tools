@@ -327,35 +327,7 @@
         </div>
     </div>
     
-    <!-- 更新日志弹窗（必须） -->
-    <div id="changelog-modal" class="fixed inset-0 z-50 hidden">
-        <!-- 遮罩层 -->
-        <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
-        
-        <!-- 弹窗容器 -->
-        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
-            <!-- 弹窗头部 -->
-            <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
-                    <i class="fa fa-list-alt mr-2 text-secondary" aria-hidden="true"></i> 更新日志
-                </h2>
-                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
-                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
-                </button>
-            </div>
-            
-            <!-- 更新日志内容 -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <div id="changelog-content" class="space-y-6">
-                    <!-- 更新日志将通过JavaScript动态生成 -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container mx-auto px-4 py-2 max-w-6xl">
-        <div class="text-center text-gray-500 text-sm fade-in">插值计算器 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
-    </div>
+    <div id="footer-container"></div>
 
     <!-- 通用脚本（必须） -->
     <script src="../../assets/js/common.js"></script>
@@ -363,7 +335,6 @@
     <!-- 工具特定脚本（可选） -->
     <script src="assets/js/script.js"></script>
     <script>
-        // 更新日志数据
         const changelogData = [
             {
                 version: '1.0.0beta',
@@ -375,22 +346,18 @@
                     '支持多x多y全局插值模式',
                     '支持三种插值点输入方式：手动输入、文件导入、自动生成',
                     '支持结果导出为Excel格式',
-                    '添加操作历史记录功能（最近3次）',
+                    '添加操作历史记录功能（最近3次）'
                 ]
             }
         ];
 
-        // 工具特定初始化代码
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化模态框
-            initModal('changelog-modal', 'changelog-btn', 'changelog-close', 'changelog-overlay');
-            initModal('dev-tools-modal', 'dev-tools-btn', 'dev-tools-close', 'dev-tools-overlay');
-            initModal('history-modal', 'history-btn', 'history-close', 'history-overlay');
+            initComponents({
+                toolName: '插值计算器',
+                version: '1.0.0beta',
+                changelogData: changelogData
+            });
 
-            // 初始化更新日志
-            renderChangelog(changelogData, 'changelog-content');
-
-            // 初始化插值计算工具
             initInterpolationCalculator();
         });
     </script>

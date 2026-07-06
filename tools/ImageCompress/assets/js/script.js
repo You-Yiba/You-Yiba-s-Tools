@@ -20,31 +20,6 @@ let errorModal, errorOverlay, errorClose, errorConfirm, errorMessage;
 let comparisonWrapper, sliderHandle;
 let uploadProgressContainer, uploadProgressBar, uploadProgressPercent;
 let devToolsBtn, devToolsModal, devToolsOverlay, devToolsClose, clearHistoryBtn;
-let changelogBtn, changelogModal, changelogOverlay, changelogClose;
-
-// 更新日志数据
-const changelogData = [
-    {
-        version: '1.0.0',
-        date: '2026-02-21',
-        changes: [
-            '初始版本发布',
-            '支持图片上传（拖拽、点击选择）',
-            '支持图片压缩（质量调节、尺寸调整）',
-            '支持预览对比功能',
-            '支持单张和批量下载',
-            '支持历史记录功能',
-            '添加开发者选项',
-            '添加更新日志功能'
-        ]
-    }
-];
-
-// 渲染更新日志 - 使用通用函数
-function renderChangelog() {
-    // 调用通用的渲染更新日志函数
-    renderChangelog(changelogData, 'changelog-content');
-}
 
 // 初始化函数
 function initImageCompressApp() {
@@ -107,12 +82,6 @@ function initImageCompressApp() {
     devToolsOverlay = document.getElementById('dev-tools-overlay');
     devToolsClose = document.getElementById('dev-tools-close');
     clearHistoryBtn = document.getElementById('clear-history');
-    
-    // 更新日志相关元素
-    changelogBtn = document.getElementById('changelog-btn');
-    changelogModal = document.getElementById('changelog-modal');
-    changelogOverlay = document.getElementById('changelog-overlay');
-    changelogClose = document.getElementById('changelog-close');
     
     console.log('DOM元素获取完成');
     
@@ -229,33 +198,6 @@ function initImageCompressApp() {
                 if (confirm('确定要清空所有历史记录吗？')) {
                     localStorage.removeItem('imageCompressHistory');
                     showError('历史记录已清空');
-                }
-            });
-        }
-        
-        // 更新日志按钮
-        if (changelogBtn) {
-            changelogBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (changelogModal) {
-                    changelogModal.classList.remove('hidden');
-                    renderChangelog();
-                }
-            });
-        }
-        
-        // 更新日志关闭
-        if (changelogClose) {
-            changelogClose.addEventListener('click', function() {
-                if (changelogModal) {
-                    changelogModal.classList.add('hidden');
-                }
-            });
-        }
-        if (changelogOverlay) {
-            changelogOverlay.addEventListener('click', function() {
-                if (changelogModal) {
-                    changelogModal.classList.add('hidden');
                 }
             });
         }

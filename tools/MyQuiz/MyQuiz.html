@@ -121,6 +121,17 @@
     <script>
         var changelogData = [
             {
+                version: '1.0.1',
+                date: '2026-07-06',
+                changes: [
+                    '新增加权随机模式，错题为高权重，新题保证被抽中',
+                    'wrongCount 持续累计，correctStreak 不封顶',
+                    '错题康复阈值可配置（默认2次）',
+                    '修复导出题库功能',
+                    '开发者工具按钮改名为"重置统计"'
+                ]
+            },
+            {
                 version: '1.0.0',
                 date: '2026-07-05',
                 changes: [
@@ -136,7 +147,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initComponents({
                 toolName: 'MyQuiz 刷题助手',
-                version: '1.0.0',
+                version: '1.0.1',
                 changelogData: changelogData
             });
         });

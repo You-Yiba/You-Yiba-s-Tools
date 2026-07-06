@@ -143,7 +143,7 @@ function createFooter(config) {
     footer.className = 'container mx-auto px-4 py-2 max-w-6xl fade-in';
     footer.innerHTML = `
         <div class="text-center text-gray-500 text-sm">
-            ${name} v${version} 作者:游一八 power by Trae
+            ${name} v${version} 作者:游一八 powered by Trae
             <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a>
         </div>
     `;
