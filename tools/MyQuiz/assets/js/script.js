@@ -31,7 +31,8 @@ var Storage = {
         var defaults = {
             shuffleOptions: true,
             lastQuizMode: 'all',
-            lastQuizCount: 20
+            lastQuizCount: 20,
+            masterThreshold: 2
         };
         try {
             var value = localStorage.getItem(this.SETTINGS_KEY);
@@ -40,7 +41,8 @@ var Storage = {
                 return {
                     shuffleOptions: parsed.shuffleOptions !== undefined ? parsed.shuffleOptions : defaults.shuffleOptions,
                     lastQuizMode: parsed.lastQuizMode !== undefined ? parsed.lastQuizMode : defaults.lastQuizMode,
-                    lastQuizCount: parsed.lastQuizCount !== undefined ? parsed.lastQuizCount : defaults.lastQuizCount
+                    lastQuizCount: parsed.lastQuizCount !== undefined ? parsed.lastQuizCount : defaults.lastQuizCount,
+                    masterThreshold: parsed.masterThreshold !== undefined ? parsed.masterThreshold : defaults.masterThreshold
                 };
             }
             return defaults;
@@ -383,19 +385,20 @@ var QuestionManager = {
     isWrong: function(id) {
         var q = this._findById(id);
         if (!q) return false;
-        return q.wrongCount > 0 && q.correctStreak < 2;
+        var threshold = Storage.getSettings().masterThreshold;
+        return q.wrongCount > 0 && q.correctStreak < threshold;
     },
 
     toggleStar: function(id, starred) {
         var q = this._findById(id);
         if (!q) return;
 
+        var threshold = Storage.getSettings().masterThreshold;
         if (starred) {
             q.wrongCount = Math.max(q.wrongCount, 1);
             q.correctStreak = 0;
         } else {
-            q.wrongCount = 0;
-            q.correctStreak = 0;
+            q.correctStreak = threshold;
         }
         q.updatedAt = Date.now();
         this._save();
@@ -403,9 +406,10 @@ var QuestionManager = {
 
     getWrongQuestions: function() {
         var result = [];
+        var threshold = Storage.getSettings().masterThreshold;
         for (var i = 0; i < this._questions.length; i++) {
             var q = this._questions[i];
-            if (q.wrongCount > 0 && q.correctStreak < 2) {
+            if (q.wrongCount > 0 && q.correctStreak < threshold) {
                 result.push(this._shallowCopy(q));
             }
         }
@@ -507,12 +511,17 @@ var QuizEngine = {
             qArr.push(this._shallowCopy(questions[i]));
         }
 
-        qArr = this._shuffleArray(qArr);
+        if (mode === 'weighted') {
+            var count = options.count || 20;
+            qArr = this._weightedSample(qArr, count);
+        } else {
+            qArr = this._shuffleArray(qArr);
 
-        if (mode === 'count') {
-            var count = options.count || 0;
-            if (count > 0 && count < qArr.length) {
-                qArr = qArr.slice(0, count);
+            if (mode === 'count') {
+                var countVal = options.count || 0;
+                if (countVal > 0 && countVal < qArr.length) {
+                    qArr = qArr.slice(0, countVal);
+                }
             }
         }
 
@@ -605,6 +614,43 @@ var QuizEngine = {
         return result;
     },
 
+    _calcWeight: function(question) {
+        var wrongCount = question.wrongCount || 0;
+        var streak = question.correctStreak || 0;
+        var weight = (2 + wrongCount) / (1 + streak / 2);
+        return Math.max(0.3, weight);
+    },
+
+    _weightedSample: function(arr, count) {
+        var pool = arr.slice();
+        var result = [];
+        var n = Math.min(count, pool.length);
+
+        for (var i = 0; i < n; i++) {
+            var totalWeight = 0;
+            for (var k = 0; k < pool.length; k++) {
+                totalWeight += this._calcWeight(pool[k]);
+            }
+
+            var rand = Math.random() * totalWeight;
+            var cumulative = 0;
+            var pickIdx = pool.length - 1;
+
+            for (var j = 0; j < pool.length; j++) {
+                cumulative += this._calcWeight(pool[j]);
+                if (rand < cumulative) {
+                    pickIdx = j;
+                    break;
+                }
+            }
+
+            result.push(pool[pickIdx]);
+            pool.splice(pickIdx, 1);
+        }
+
+        return result;
+    },
+
     _shuffleOptions: function(question) {
         if (question.type !== 'choice') {
             return question;
@@ -682,6 +728,7 @@ var UI = {
         var modes = [
             { value: 'all', label: '全部题目', icon: 'fa-book' },
             { value: 'count', label: '指定数量', icon: 'fa-hashtag' },
+            { value: 'weighted', label: '加权随机', icon: 'fa-balance-scale' },
             { value: 'wrong', label: '错题重刷', icon: 'fa-star' }
         ];
 
@@ -695,7 +742,8 @@ var UI = {
 
         var countInputDiv = document.createElement('div');
         countInputDiv.id = 'quiz-count-input';
-        countInputDiv.className = 'mt-3 pl-6' + (settings.lastQuizMode === 'count' ? '' : ' hidden');
+        var showCountInput = settings.lastQuizMode === 'count' || settings.lastQuizMode === 'weighted';
+        countInputDiv.className = 'mt-3 pl-6' + (showCountInput ? '' : ' hidden');
         countInputDiv.innerHTML = '\
             <div class="flex items-center">\
                 <span class="text-sm text-gray-600 mr-2">数量：</span>\
@@ -706,6 +754,18 @@ var UI = {
         modeGroup.appendChild(countInputDiv);
 
         container.appendChild(modeGroup);
+
+        var thresholdGroup = document.createElement('div');
+        thresholdGroup.className = 'bg-white rounded-xl p-3 shadow-sm mb-3';
+        thresholdGroup.innerHTML = '\
+            <p class="text-sm font-medium text-neutral-dark mb-2">错题康复阈值</p>\
+            <div class="flex items-center">\
+                <span class="text-sm text-gray-600 mr-2">连续答对</span>\
+                <input type="number" id="master-threshold" min="1" max="10" value="' + settings.masterThreshold + '" class="w-16 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary text-center">\
+                <span class="text-sm text-gray-500 ml-2">次后从错题本移除</span>\
+            </div>\
+        ';
+        container.appendChild(thresholdGroup);
 
         var shuffleGroup = document.createElement('div');
         shuffleGroup.className = 'bg-white rounded-xl p-3 shadow-sm mb-3';
@@ -745,7 +805,7 @@ var UI = {
         for (var j = 0; j < radios.length; j++) {
             radios[j].addEventListener('change', function() {
                 var countInput = document.getElementById('quiz-count-input');
-                if (this.value === 'count') {
+                if (this.value === 'count' || this.value === 'weighted') {
                     countInput.classList.remove('hidden');
                 } else {
                     countInput.classList.add('hidden');
@@ -769,6 +829,19 @@ var UI = {
         var shuffleCheckbox = document.getElementById('shuffle-options');
         if (shuffleCheckbox) {
             shuffleCheckbox.addEventListener('change', function() {
+                self._saveSettingsFromUI();
+            });
+        }
+
+        var thresholdInput = document.getElementById('master-threshold');
+        if (thresholdInput) {
+            thresholdInput.addEventListener('input', function() {
+                var val = parseInt(this.value);
+                if (isNaN(val) || val < 1) {
+                    this.value = 1;
+                } else if (val > 10) {
+                    this.value = 10;
+                }
                 self._saveSettingsFromUI();
             });
         }
@@ -834,11 +907,14 @@ var UI = {
         var count = countInput ? parseInt(countInput.value) || 20 : 20;
         var shuffleCheckbox = document.getElementById('shuffle-options');
         var shuffle = shuffleCheckbox ? shuffleCheckbox.checked : true;
+        var thresholdInput = document.getElementById('master-threshold');
+        var threshold = thresholdInput ? parseInt(thresholdInput.value) || 2 : 2;
 
         Storage.saveSettings({
             shuffleOptions: shuffle,
             lastQuizMode: mode,
-            lastQuizCount: count
+            lastQuizCount: count,
+            masterThreshold: threshold
         });
     },
 
