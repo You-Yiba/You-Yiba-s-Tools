@@ -403,12 +403,12 @@
 /* ------------------------------------------------------------
    10. 题库浏览模式
    ------------------------------------------------------------ */
-.bank-mode #quiz-panel {
-    display: none;
+.bank-mode #mobile-panel-quiz {
+    display: none !important;
 }
 
-.bank-mode #side-panel {
-    display: none;
+.bank-mode #mobile-panel-browse {
+    display: none !important;
 }
 
 .bank-browser-container {
@@ -418,9 +418,13 @@
 }
 
 .bank-mode .bank-browser-container {
-    display: grid;
+    display: grid !important;
     grid-template-columns: 1fr;
     gap: 1.5rem;
+}
+
+.bank-mode #main-content {
+    grid-column: 1 / -1;
 }
 
 @media (min-width: 1024px) {

@@ -330,6 +330,45 @@
         </div>
     </div>
     
+    <!-- 更新日志弹窗（必须） -->
+    <div id="changelog-modal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div id="changelog-overlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- 弹窗容器 -->
+        <div id="changelog-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] glass-effect rounded-xl shadow-lg flex flex-col">
+            <!-- 弹窗头部 -->
+            <div id="changelog-header" class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-neutral-dark flex items-center">
+                    <i class="fa fa-list-alt mr-2 text-secondary" aria-hidden="true"></i> 更新日志
+                </h2>
+                <button id="changelog-close" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="关闭">
+                    <i class="fa fa-times text-secondary" aria-hidden="true"></i>
+                </button>
+            </div>
+            
+            <!-- 更新日志内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="changelog-content" class="space-y-6">
+                    <!-- 版本 1.0.0 (2026-02-21) -->
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <h3 class="text-xl font-bold text-primary mb-3">版本 1.0.0 <span class="text-sm font-normal text-secondary">2026-02-21</span></h3>
+                        <div class="space-y-2">
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 初始版本发布，实现天选之子随机抽取工具</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 支持随机抽取学号、人名或同时展示学号+人名</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 支持单次抽取1人或多人，可自定义抽取人数</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 支持"不重复抽取"模式和"重置抽取池"功能</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 实现名字滚动动画，支持速度和持续时间调节</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 支持TXT和Excel文件导入名单</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 支持名单去重和多名单管理功能</p>
+                            <p><i class="fa fa-check-circle text-green-500 mr-2" aria-hidden="true"></i> 支持学号范围输入，自动生成连续学号列表</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- 结果弹窗 -->
     <div id="result-modal" class="fixed inset-0 z-50 hidden">
         <!-- 遮罩层 -->
@@ -435,7 +474,9 @@
         </div>
     </div>
     
-    <div id="footer-container"></div>
+    <div class="container mx-auto px-4 py-2 max-w-6xl">
+        <div class="text-center text-gray-500 text-sm fade-in">天选之子 v1.0.0beta 作者:游一八 power by Trae <a href="#" id="changelog-btn" class="text-blue-500 underline ml-2">更新日志</a></div>
+    </div>
 
     <!-- 通用脚本（必须） -->
     <script src="../../assets/js/common.js"></script>
@@ -443,30 +484,12 @@
     <!-- 工具特定脚本（可选） -->
     <script src="assets/js/script.js"></script>
     <script>
-        const changelogData = [
-            {
-                version: '1.0.0',
-                date: '2026-02-21',
-                changes: [
-                    '初始版本发布，实现天选之子随机抽取工具',
-                    '支持随机抽取学号、人名或同时展示学号+人名',
-                    '支持单次抽取1人或多人，可自定义抽取人数',
-                    '支持"不重复抽取"模式和"重置抽取池"功能',
-                    '实现名字滚动动画，支持速度和持续时间调节',
-                    '支持TXT和Excel文件导入名单',
-                    '支持名单去重和多名单管理功能',
-                    '支持学号范围输入，自动生成连续学号列表'
-                ]
-            }
-        ];
-
+        // 工具特定初始化代码
         document.addEventListener('DOMContentLoaded', function() {
-            initComponents({
-                toolName: '天选之子',
-                version: '1.0.0beta',
-                changelogData: changelogData
-            });
-
+            // 初始化模态框
+            initModal('changelog-modal', 'changelog-btn', 'changelog-close', 'changelog-overlay');
+            initModal('dev-tools-modal', 'dev-tools-btn', 'dev-tools-close', 'dev-tools-overlay');
+            initModal('history-modal', 'history-btn', 'history-close', 'history-overlay');
             initModal('result-modal', null, 'result-close', 'result-overlay');
             initModal('confirm-modal', null, 'confirm-close', 'confirm-overlay');
             initModal('edit-list-modal', null, 'edit-list-close', 'edit-list-overlay');

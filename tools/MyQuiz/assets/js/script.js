@@ -843,6 +843,9 @@ var UI = {
                     this.value = 10;
                 }
                 self._saveSettingsFromUI();
+                self.refreshWrongList();
+                self.refreshBankList();
+                self.refreshSettingsStats();
             });
         }
 
@@ -930,6 +933,8 @@ var UI = {
             questions = QuestionManager.getAll();
         } else if (mode === 'count') {
             questions = QuestionManager.getAll();
+        } else if (mode === 'weighted') {
+            questions = QuestionManager.getAll();
         } else if (mode === 'wrong') {
             questions = QuestionManager.getWrongQuestions();
         }
@@ -973,7 +978,7 @@ var UI = {
         }
 
         var questions = [];
-        if (mode === 'all' || mode === 'count') {
+        if (mode === 'all' || mode === 'count' || mode === 'weighted') {
             questions = QuestionManager.getAll();
         } else if (mode === 'wrong') {
             questions = QuestionManager.getWrongQuestions();
@@ -2003,7 +2008,7 @@ var UI = {
 
         var stats = document.createElement('span');
         stats.className = 'bank-list-card-stats';
-        stats.innerHTML = '错误 <span style="color: #ef4444; font-weight: 500;">' + (question.wrongCount || 0) + '</span> 次 / 连续答对 <span style="color: #22c55e; font-weight: 500;">' + (question.correctStreak || 0) + '/2</span>';
+        stats.innerHTML = '错误 <span style="color: #ef4444; font-weight: 500;">' + (question.wrongCount || 0) + '</span> 次 / 连续答对 <span style="color: #22c55e; font-weight: 500;">' + (question.correctStreak || 0) + '</span>';
         footer.appendChild(stats);
 
         card.appendChild(footer);
@@ -2111,7 +2116,7 @@ var UI = {
                 <div class="detail-stat-label">错误次数</div>\
             </div>\
             <div class="detail-stat-item streak">\
-                <div class="detail-stat-number">' + (question.correctStreak || 0) + ' / 2</div>\
+                <div class="detail-stat-number">' + (question.correctStreak || 0) + '</div>\
                 <div class="detail-stat-label">连续答对</div>\
             </div>\
         ';
@@ -2623,7 +2628,7 @@ var UI = {
                             <i class="fa fa-trash-o mr-2"></i>清空题库\
                         </button>\
                         <button id="dev-clear-wrong-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-4 rounded-xl transition-colors flex items-center justify-center">\
-                            <i class="fa fa-undo mr-2"></i>清空错题记录\
+                            <i class="fa fa-refresh mr-2"></i>重置统计\
                         </button>\
                         <button id="dev-clear-all-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-4 rounded-xl transition-colors flex items-center justify-center">\
                             <i class="fa fa-exclamation-triangle mr-2"></i>一键清空所有数据\
@@ -2787,8 +2792,8 @@ var UI = {
     _clearWrongRecords: function() {
         var self = this;
         this._showConfirmModal(
-            '清空错题记录',
-            '确定要清空所有错题记录吗？题目会保留，但错误次数和连续答对次数将归零。',
+            '重置统计',
+            '确定要重置所有题目统计吗？题目会保留，但错误次数和连续答对次数将全部归零。',
             function() {
                 var all = QuestionManager.getAll();
                 for (var i = 0; i < all.length; i++) {
@@ -2804,7 +2809,7 @@ var UI = {
                     self.renderBankBrowserList();
                     self.renderQuestionDetail(self._selectedQuestionId);
                 }
-                showToast('错题记录已清空', 'success');
+                showToast('统计已重置', 'success');
             }
         );
     },
