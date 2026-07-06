@@ -977,3 +977,75 @@
         min-height: auto;
     }
 }
+
+/* ------------------------------------------------------------
+   11. 移动端底部导航栏
+   ------------------------------------------------------------ */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.mobile-nav-btn {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.mobile-nav-btn:active {
+  opacity: 0.7;
+}
+
+.mobile-nav-btn.active {
+  color: #3b82f6;
+}
+
+.mobile-nav-btn.active i {
+  color: #3b82f6;
+}
+
+/* ------------------------------------------------------------
+   12. 移动端面板显示控制
+   ------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  .mobile-panel {
+    display: none;
+  }
+
+  .mobile-panel.active {
+    display: block;
+  }
+
+  /* 右栏在移动端是 flex 布局，需要覆盖 */
+  #mobile-panel-browse.mobile-panel.active {
+    display: flex;
+  }
+
+  /* 取消移动端固定高度限制，改为自然流式 */
+  .quiz-layout-wrapper {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+  }
+
+  .quiz-layout-wrapper > div {
+    height: auto;
+  }
+
+  #main-content {
+    height: auto;
+    overflow: visible;
+  }
+
+  #quiz-panel,
+  #side-panel {
+    height: auto;
+    overflow: visible;
+  }
+
+  #quiz-container {
+    height: auto;
+    overflow: visible;
+  }
+}
