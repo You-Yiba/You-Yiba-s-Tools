@@ -167,22 +167,22 @@ function createToolbar(config) {
     let buttons = '';
     if (showHome) {
         buttons += `
-            <a href="${homeUrl}" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-home mr-2" aria-hidden="true"></i><span class="hidden sm:inline">回首页</span>
+            <a href="${homeUrl}" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center justify-center sm:justify-start">
+                <i class="fa fa-home sm:mr-2" aria-hidden="true"></i><span class="hidden sm:inline">回首页</span>
             </a>
         `;
     }
     if (showHistory) {
         buttons += `
-            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-history mr-2" aria-hidden="true"></i><span class="hidden sm:inline">历史记录</span>
+            <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center justify-center sm:justify-start">
+                <i class="fa fa-history sm:mr-2" aria-hidden="true"></i><span class="hidden sm:inline">历史记录</span>
             </button>
         `;
     }
     if (showDevTools) {
         buttons += `
-            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center">
-                <i class="fa fa-code mr-2" aria-hidden="true"></i><span class="hidden sm:inline">开发者选项</span>
+            <button id="dev-tools-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-flex items-center justify-center sm:justify-start">
+                <i class="fa fa-code sm:mr-2" aria-hidden="true"></i><span class="hidden sm:inline">开发者选项</span>
             </button>
         `;
     }
